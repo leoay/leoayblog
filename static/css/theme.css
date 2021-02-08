@@ -1,0 +1,349 @@
+/*自定义样式表*/
+
+/* .article-card {
+  margin: 0 auto;
+  text-align: left;
+  position: relative;
+  margin-bottom: 0px;
+  background-color: rgb(255, 255, 255);
+  border-top: 0px solid rgba(15, 15, 15, 0.212);
+  border-radius:12px; 
+  padding: 0px 0px 0px 0px;
+} */
+
+html {
+  min-height: 100%;
+  position: relative;
+  background-color: #f0f2f5;
+}
+
+body {
+  margin-bottom: 170px;
+  background-color: #f0f2f5;
+  color: #636b6f;
+  font-family: Helvetica,Arial,PingFang SC,Noto Sans,Roboto,Microsoft Yahei,sans-serif;
+  min-height: 100vh;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  height: 100%;
+}
+
+header {
+  background-color: #fff;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.uk-padding-remove-bottom {
+  padding-bottom: 0 !important;
+}
+
+.uk-section {
+  display: flow-root;
+  box-sizing: border-box;
+  padding-top: 40px;
+  padding-bottom: 0px;
+}
+
+.nav-topic {
+  font-size: 2em;
+}
+
+.article-title {
+  font-family: SourceHanSansCNRegular;
+  font-size: 1.3rem;
+  line-height: 0.7;
+  margin-top: -15px;
+  color: #000;
+  text-decoration-color: #555352;
+}
+
+.main_pc_div {
+    border: 2px solid rgb(55 50 56 / 11%);
+    padding: 10px;
+    border-radius: 5px;
+    background: #ffffff;
+}
+
+.main_pc_write_article {
+  border: 2 2 2 2 solid rgb(55 50 56 / 11%);
+  padding: 35px;
+  border-radius: 5px;
+  background: #ffffff;
+  min-height: 870px
+}
+
+.main_article {
+  font-family: SourceHanSansCNRegular;
+  border: 2px solid rgb(55 50 56 / 11%);
+  box-shadow:0 0 23px 2px #999;
+  padding: 35px;
+  border-radius: 5px;
+  background: #ffffff;
+  min-height: 700;
+}
+
+.uk-card-body {
+  padding: 15px 15px;
+}
+
+.article p{
+  font-size: 1rem;
+  line-height: 1.7;
+  text-decoration: none;
+}
+
+.article h1{
+  font-family: SourceHanSansCNRegular;
+  font-size: 1.3rem;
+  line-height: 1.8;
+  text-decoration: none;
+}
+
+.article h2{
+  font-family: SourceHanSansCNRegular;
+  font-size: 1.2rem;
+  line-height: 1.8;
+  text-decoration: none;
+}
+.article h3{
+  font-family: SourceHanSansCNRegular;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  text-decoration: none;
+}
+
+.article h4{
+  font-family: SourceHanSansCNRegular;
+  font-size: 1rem;
+  line-height: 1.8;
+  text-decoration: none;
+}
+
+.article h5{
+  font-family: SourceHanSansCNRegular;
+  font-size: 0.9rem;
+  line-height: 1.8;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.main_page {
+  max-width: 100%;
+  min-height: 670px;
+}
+
+.main_page .left_content h5 {
+  font-size: 19px;
+}
+  
+
+/* .uk-card-default .uk-card-header {
+  border-bottom: 0px solid #e5e5e5;
+} */
+
+/*侧边栏边框主题*/
+
+.show_card {
+  padding: 8px;
+  background: rgb(255, 255, 255);
+}
+
+.uk-card-title-side {
+  font-size: 1.2rem;
+}
+
+.uk-divider-vertical {
+  width: 1px;
+  height: 100px;
+  border-left: 0px;
+  -webkit-transform: scale(0.5, 1);
+  transform: scale(0.5, 1);
+}
+
+.uk-divider-small {
+  -webkit-transform: scale(1, 0.5);
+  transform: scale(1, 0.5);
+}
+
+.article p>img {
+  box-shadow:0 0 20px 5px #999;
+  padding: 20px;
+  margin: 20px 0px 20px 0px;
+}
+
+.cm-header {
+  color: #9cdcfe;
+}
+
+@font-face {
+  font-family: "SourceHanSansCNRegular";
+  src: url("./fonts/SourceHanSansCNRegular.woff2") format("woff2"),
+       url("./fonts/SourceHanSansCNRegular.woff") format("woff"),
+       url("./fonts/SourceHanSansCNRegular.ttf") format("truetype"),
+       url("./fonts/SourceHanSansCNRegular.eot") format("embedded-opentype"),
+       url("./fonts/SourceHanSansCNRegular.svg") format("svg"),
+       url("./fonts/SourceHanSansCNRegular.otf") format("opentype");
+}
+
+/* 文章的字体样式 */
+.main_article .p {
+  font-family: SourceHanSansCNRegular;
+  color: #111;
+  font-size: 15px;
+}
+
+/* 文章的摘要样式样式 */
+.main_article .summary {
+  font-family: Helvetica,Arial,PingFang SC,Noto Sans,Roboto,Microsoft Yahei,sans-serif;
+}
+
+.main_article,.cas_content pre {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 15px;
+  word-wrap:break-word;
+  border: 2px none ;
+  background-color: #ffffff;
+  color: #1b1d20;
+  line-height: 1.6;
+  font-size: 15px;
+  box-shadow:0 0 5px 3px #eadbd1;
+}
+
+/* .main_article,.cas_content pre:before {
+  content: '';
+  display: block;
+  height: 30px;
+  width: 100%;
+  word-wrap:break-word;
+  background-size: 45px;
+  background-repeat: no-repeat;
+  color: #1b1d20;
+  background-color: ##e6f5ff;
+  margin-bottom: -7px;
+  border-radius: 0px;
+  background-position: 10px 10px;
+} */
+
+.main_article .title{
+  font-family: SourceHanSansCNRegular;
+  color: #111;
+  font-weight: 600;
+  font-size: 26px;
+}
+
+.main_article .h3{
+  font-family: SourceHanSansCNRegular;
+  color: #111;
+  font-size: 26px;
+}
+
+/* .article pre {
+  background: #444444;
+  color: #d7ba7d;
+} */
+
+/*移动端适配样式表*/
+@media only screen and (max-width: 540px){
+
+  body {
+    min-height: 50vh;
+    margin-bottom: 150px;
+  }
+
+  html {
+    min-height: 80%;
+    position: relative;
+    background-color: #f0f2f5;
+  }
+
+  .uk-container {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .article h3{
+    font-size: 15px;
+  }
+
+  .article .uk-badge{
+    font-size: 8px;
+  }
+
+  .article .article_title_img {
+    width: 40px;
+  }
+
+  .article .count_info {
+    display: none;
+  }
+
+  
+  .main_page {
+    max-width: 100%;
+    min-height: 0px;
+  }
+
+  .main_article, .main_pc_write_article{
+    width: 100%;
+    padding: 10px 10px 10px 10px;
+    min-height: 0px;
+    margin-top: 0px;
+  }
+
+
+  /* footer .logo {
+   display: none;
+  } */
+
+  .footer {
+    display: none;
+  }
+
+  footer .footer_content{
+    display: none;
+  }
+}
+
+
+@media only screen and (min-width: 750) {
+  
+}
+
+
+/*折角功能实现*/
+/* .main_pc_write_article{
+  background: linear-gradient(to left bottom, transparent 50%, #444c57  0) no-repeat 100% 0 / 3.9em 3.9em,linear-gradient(-135deg, transparent 2.8em, #fff 0);
+} */
+
+canvas {
+  margin-top: -500px;
+}
+
+
+/*卡片生成工具样式表*/
+
+
+
+
+
+
+/* 公众号文章样式 */
+/* 公众号的样式不应该与博客的样式相同，博客的样式与知乎，CSDN, InfoQ等保持一致 */
+/* .main_article h3 {
+  line-height: 3.0;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+  font-style: italic;
+} */

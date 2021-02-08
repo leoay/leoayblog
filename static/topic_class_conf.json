@@ -1,0 +1,47 @@
+{
+    "mon_class": [
+        {
+            "name": {"class_name": "代码", "route_name": "codeTech"},
+            "son_class": [
+                {"class_name":"技术速览", "route_name": "tecCol" },
+                {"class_name":"开源", "route_name": "openSource" },
+                {"class_name":"实用", "route_name": "practicalTool" },
+                {"class_name":"漫画", "route_name": "comic" },
+                {"class_name":"名人", "route_name": "celebrity" },
+                {"class_name":"航模", "route_name": "aircraftModel" }
+            ]
+        },
+        {
+            "name": {"class_name": "创作", "route_name": "creativeAbility"},
+            "son_class": [
+                 {"class_name":"公众号", "route_name": "wePubWriting" },
+                 {"class_name":"知乎", "route_name": "zhiHuWriting" },
+                 {"class_name":"画画", "route_name": "drawingLearn" },
+                 {"class_name":"布鲁斯", "route_name": "blues" },
+                 {"class_name":"视频", "route_name": "videoCreation" },
+                 {"class_name":"摄影", "route_name": "cameraTech" },
+                 {"class_name":"碎碎念", "route_name": "brokenThoughts" }
+            ]
+        },
+        {
+            "name": {"class_name": "商业", "route_name": "businessStudies"},
+            "son_class": [
+                {"class_name": "基金与股票", "route_name": "fundAndEquityResearch" },
+                {"class_name": "商业故事","route_name": "bussinessStory" },
+                {"class_name": "基本功","route_name": "bussinessBase" },
+                {"class_name": "leoay私董会","route_name": "leoayPrivateCouncil" },
+                {"class_name": "房产", "route_name": "realEstateResearch" }
+            ]
+        },
+        {
+            "name": {"class_name": "知识星球归档", "route_name": "knowledgePlanetArch"},
+            "son_class": [
+                {"class_name": "leoay读与行",  "route_name": "leoayReadWrite" },
+                {"class_name": "python实验室",  "route_name": "pythonLab" },
+                {"class_name": "go实验室",  "route_name": "goLab" },
+                {"class_name": "leoay小圈",  "route_name": "leoayMini" },
+                {"class_name": "python星球", "route_name": "pythonPlanet" }
+            ]
+        }
+    ]
+}
