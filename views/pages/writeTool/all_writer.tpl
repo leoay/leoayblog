@@ -295,7 +295,6 @@ $("#saveGenCard").click(function () {
             $("#article_title").val(nowDate);
         }
     });
-  
 </script>
 
             <!-- <div class="uk-grid-small uk-child-width-expand@s uk-text-center uk-margin-large-top " uk-grid>
@@ -333,5 +332,4 @@ $("#saveGenCard").click(function () {
             　});
 		}});
     });
-
 </script>

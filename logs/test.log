@@ -3412,3 +3412,22 @@
 2021/02/10 08:54:41.808 [I] [PicPoolController.go:181]  {"image_row":[{"image_col":[{"name":"leoay_logo.jpg","url":"static/picture_pool/1612772171389.jpg"},{"name":"Artboard-1024x538.png","url":"static/picture_pool/1612772167020.png"},{"name":"pexels-lisa-fotios-3477855.jpg","url":"static/picture_pool/1612771994412.jpg"}]},{"image_col":[{"name":"imageonline-co-gifimage.gif","url":"static/picture_pool/1612771990755.gif"},{"name":"laravel.png","url":"static/picture_pool/1612771984913.png"},{"name":"leoay_logo.jpg","url":"static/picture_pool/1612771979376.jpg"}]},{"image_col":[{"name":"leoay_logo.jpg","url":"static/picture_pool/1612771979376.jpg"}]}]} 
 2021/02/10 08:54:49.458 [I] [UsersController.go:26]  1 
 2021/02/10 08:54:49.458 [I] [UsersController.go:28]  1 true 
+2021/02/23 12:02:18.712 [I] [asm_amd64.s:1374]  http server Running on http://0.0.0.0:8085
+2021/02/23 12:02:31.130 [I] [UsersController.go:26]  <nil> 
+2021/02/23 12:02:31.130 [I] [UsersController.go:28]  0 false 
+2021/02/23 12:02:31.130 [I] [MainController.go:25]  是否登陆 false 
+2021/02/23 12:02:31.148 [I] [MainController.go:37]  1 
+2021/02/23 12:02:31.154 [I] [MainController.go:85]  [1] 
+2021/02/23 12:02:31.154 [I] [MainController.go:107]  1289350 
+2021/02/23 12:02:31.154 [I] [MainController.go:114]  14 22 
+2021/02/23 12:02:31.154 [I] [MainController.go:119]  14 22 9 
+2021/02/23 12:02:31.154 [I] [MainController.go:124]  14 22 9 10 
+2021/02/23 12:02:31.154 [I] [MainController.go:107]  1301767 
+2021/02/23 12:02:31.154 [I] [MainController.go:114]  15 1 
+2021/02/23 12:02:31.154 [I] [MainController.go:119]  15 1 36 
+2021/02/23 12:02:31.154 [I] [MainController.go:124]  15 1 36 7 
+2021/02/23 12:02:31.154 [I] [MainController.go:107]  1375227 
+2021/02/23 12:02:31.154 [I] [MainController.go:114]  15 22 
+2021/02/23 12:02:31.154 [I] [MainController.go:119]  15 22 0 
+2021/02/23 12:02:31.154 [I] [MainController.go:124]  15 22 0 27 
+2021/02/23 12:02:31.155 [I] [MainController.go:151]  未登陆 
