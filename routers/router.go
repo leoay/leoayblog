@@ -45,6 +45,8 @@ func init() {
 
 	//图片池上传
 	beego.Router("/picpool/upload", &controllers.PicPoolController{}, "post:Upload")
+	//获取所有图片信息
+	beego.Router("/picpool/queryimages", &controllers.PicPoolController{}, "get:QueryImages")
 
 	//github oauth认证路由
 	beego.Router("/api/github_oauth", &controllers.LoginController{}, "get:Github_oauth")

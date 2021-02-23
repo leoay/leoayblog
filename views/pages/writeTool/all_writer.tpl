@@ -23,11 +23,27 @@
 
                         </div>
                         <div class="uk-width-expand">
-                            <input class="uk-input" type="text" id="article_title" name="title" uk-border-pill placeholder="输入文章标题，过长的标题会被隐藏的" style="background: #fff;color: #111;border: 2px solid #e6d4d4;border-radius: 31px;">
+                            <input class="uk-input" type="text" id="article_title" name="title" uk-border-pill placeholder="文章标题" style="background: #fff;color: #111;border: 2px solid #e6d4d4;border-radius: 31px;">
                         </div>
                         <div class="uk-width-expand">
-                            <input class="uk-input" type="text" id="article_main_pic" name="main_pic_path" uk-border-pill placeholder="输入文章主图链接" style="background: #fff;color: #111;border: 2px solid #e6d4d4;border-radius: 31px;">
+                            <input class="uk-input" type="text" id="article_main_pic" name="main_pic_path" uk-border-pill placeholder="文章主图链接" style="background: #fff;color: #111;border: 2px solid #e6d4d4;border-radius: 31px;">
                         </div>
+                        <div class="uk-width-expand">
+                            <button class="uk-button uk-button-default uk-border-pill" id="selectInnerPicPool" type="button" uk-toggle="target: #modal-example">选择或上传图片</button>
+                        </div>
+                        
+                        <!-- 图片选择器model -->
+                        <div id="modal-example" uk-modal>
+                            <div class="uk-modal-dialog uk-modal-body picpool_model">
+                                <h2 class="uk-modal-title">选择仓库中的图片</h2>
+                                
+                                <!-- <p class="uk-text-right">
+                                    <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+                                    <button class="uk-button uk-button-primary" type="button">Save</button>
+                                </p> -->
+                            </div>
+                        </div>
+
                     </div>
                 
                     <div id="leoaylog-editor" class="uk-margin-medium-top">
@@ -282,10 +298,40 @@ $("#saveGenCard").click(function () {
   
 </script>
 
+            <!-- <div class="uk-grid-small uk-child-width-expand@s uk-text-center uk-margin-large-top " uk-grid>
+                <div>
+                    <div class="uk-background-muted uk-padding">Item</div>
+                </div>
+            </div> -->
+
 <script>
     //初始化标题
     $("#article_title").val({{.artTitle}});
     //初始化类目
      $("#article_class1").val({{.firstClass}});
      $("#article_class2").val({{.secondClass}});
+</script>
+
+<script>
+    //异步请求加载图片json数据
+    $("#selectInnerPicPool").click(function() {
+        $.ajax({url:"/picpool/queryimages", async:true, success:function(result){
+            var obj = jQuery.parseJSON(result)
+            console.log(obj.image_row)
+            var imgrowind
+            $.each(obj.image_row, function(index, obji) {
+                //console.log("++++++++++++++++++111" + index)
+                $(".picpool_model").append("<div class=\"uk-grid-small uk-child-width-expand@s uk-text-center uk-margin-large-top picpool_model_image_row" + imgrowind +"\" uk-grid>");s
+                $.each(obji, function(index2, obj1) {
+                    $.each(obj1, function(index, obj2) {
+                        $("picpool_model_image_row" + imgrowind).append("<div><div class=\"uk-background-muted uk-padding\">Item</div></div>");
+                    });
+                $(".picpool_model").append("</div>");
+                });
+                //$("/picpool_model").append("<div class=\"uk-grid-small uk-child-width-expand@s uk-text-center uk-margin-large-top\" uk-grid>");
+                //$.each(obji)
+            　});
+		}});
+    });
+
 </script>

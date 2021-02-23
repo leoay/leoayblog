@@ -35,6 +35,7 @@ func init() {
 	utils.DB.AutoMigrate(&models.User{})
 	utils.DB.AutoMigrate(&models.Article_classes{})
 	utils.DB.AutoMigrate(&models.Article_bases{})
+	utils.DB.AutoMigrate(&models.Image_Base{})
 
 	//db.Delete(models.Article_classes{}, "first_class LIKE ?", "%*%")
 	//删除全部
