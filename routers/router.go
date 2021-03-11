@@ -48,6 +48,12 @@ func init() {
 	//获取所有图片信息
 	beego.Router("/picpool/queryimages", &controllers.PicPoolController{}, "get:QueryImages")
 
+	//开放图片池上传
+	beego.Router("open/picpool/index", &controllers.OpenPicPoolController{}, "get:Index")
+	beego.Router("open/picpool/upload", &controllers.OpenPicPoolController{}, "post:OpenPicUpload")
+	//开放获取所有图片信息
+	beego.Router("open/picpool/queryimages", &controllers.OpenPicPoolController{}, "get:OpenQueryImages")
+
 	//github oauth认证路由
 	beego.Router("/api/github_oauth", &controllers.LoginController{}, "get:Github_oauth")
 
@@ -63,5 +69,8 @@ func init() {
 	//用户信息
 	//用户的博客显示页
 	beego.Router("/user/blog/:userid", &controllers.UserInfoController{}, "get:UserBlogPub")
+
+	//leoay工作空间
+	beego.Router("/workstation", &controllers.ToolController{}, "get:WorkStation")
 
 }

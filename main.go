@@ -97,7 +97,6 @@ func init() {
 		CookieLifeTime:  3600,
 		ProviderConfig:  "./runtime/session",
 	}
-
 	globalSessions, _ = session.NewManager("file", sessionConfig)
 	go globalSessions.GC()
 }

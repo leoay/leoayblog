@@ -6,7 +6,7 @@
                 <p class="uk-text-light uk-width-1 title uk-text-break">{{ .articleInfo.ArticleTitle }}</p>
             </div>
 
-            <div class="uk-margin-medium-top"> 
+            <!-- <div class="uk-margin-medium-top">  -->
                 <a href="{{.articleInfo.ArticleFirstClassRoute}}">
                     <span class="uk-label">{{.articleInfo.ArticleFirstClass}}</span>
                 </a>

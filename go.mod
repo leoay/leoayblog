@@ -23,6 +23,7 @@ require (
 	github.com/smartystreets/goconvey v1.6.4
 	github.com/tensorflow/tensorflow v2.3.1+incompatible // indirect
 	github.com/ugorji/go v1.2.3 // indirect
+	gocv.io/x/gocv v0.26.0 // indirect
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad
 	golang.org/x/net v0.0.0-20201110031124-69a78807bb2b // indirect
 	golang.org/x/sys v0.0.0-20210110051926-789bb1bd4061 // indirect

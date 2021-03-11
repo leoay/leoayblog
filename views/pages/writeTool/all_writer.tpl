@@ -297,11 +297,11 @@ $("#saveGenCard").click(function () {
     });
 </script>
 
-            <!-- <div class="uk-grid-small uk-child-width-expand@s uk-text-center uk-margin-large-top " uk-grid>
-                <div>
-                    <div class="uk-background-muted uk-padding">Item</div>
-                </div>
-            </div> -->
+<!-- <div class="uk-grid-small uk-child-width-expand@s uk-text-center uk-margin-large-top " uk-grid>
+    <div>
+        <div class="uk-background-muted uk-padding">Item</div>
+    </div>
+</div> -->
 
 <script>
     //初始化标题

@@ -117,6 +117,14 @@ footer {
   font-size: 1.1rem;
   line-height: 1.8;
   text-decoration: none;
+
+  display: block;
+  font-size: 1.17em;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
 }
 
 .article h4{
@@ -196,10 +204,12 @@ a:hover {
 }
 
 /* 文章的字体样式 */
-.main_article .p {
+.main_article p {
   font-family: SourceHanSansCNRegular;
   color: #111;
-  font-size: 15px;
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: 16px;
 }
 
 /* 文章的摘要样式样式 */
@@ -242,11 +252,20 @@ a:hover {
   font-size: 26px;
 }
 
-.main_article .h3{
+.main_article h3{
   font-family: SourceHanSansCNRegular;
   color: #111;
   font-size: 26px;
+
+  display: block;
+  font-size: 1.7em;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
 }
+
 
 /* .article pre {
   background: #444444;
