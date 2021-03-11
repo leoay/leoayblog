@@ -51,3 +51,6 @@
 2021/03/11 11:11:09.886 [D] [server.go:2843]  |  61.130.10.146|[97;42m 200 [0m|   1.214342ms|   match|[97;44m GET     [0m /workstation   r:/workstation
 2021/03/11 11:11:10.109 [D] [server.go:2843]  |  61.130.10.146|[97;43m 404 [0m|    159.201µs| nomatch|[97;44m GET     [0m /static/picture_pool/1609839383316.svg
 2021/03/11 11:11:10.129 [D] [server.go:2843]  |  61.130.10.146|[97;42m 200 [0m|     96.803µs|   match|[97;44m GET     [0m /static/css/theme.css
+2021/03/11 11:19:06.681 [D] [server.go:2843]  |  61.130.10.146|[97;42m 200 [0m|   1.089764ms|   match|[97;44m GET     [0m /workstation   r:/workstation
+2021/03/11 11:19:06.842 [D] [server.go:2843]  |  61.130.10.146|[97;43m 404 [0m|    167.153µs| nomatch|[97;44m GET     [0m /static/picture_pool/1609839383316.svg
+2021/03/11 11:19:07.076 [D] [server.go:2843]  |  61.130.10.146|[97;42m 200 [0m|     63.726µs|   match|[97;44m GET     [0m /static/css/theme.css
