@@ -1,8 +1,8 @@
 package controllers
 
+//图片池控制器，用户用户图片上传
 import (
 	"WriterReaderLog/models"
-	"WriterReaderLog/utils"
 	"encoding/json"
 	"fmt"
 	"strconv"
@@ -10,19 +10,23 @@ import (
 	"time"
 
 	"github.com/astaxie/beego"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
+//PicPoolController 图片池控制器结构体
 type PicPoolController struct {
-	UserStatusController
+	AuthController
 }
 
+//ReturnMsg 上传成功后的返回消息结构体
 type ReturnMsg struct {
 	Success int    `json:"success"`
 	Message string `json:"message"`
 	Url     string `json:"url"`
 }
 
-//图片上传路由
+//Upload 图片上传路由
 func (c *PicPoolController) Upload() {
 	//TODO: 加入鉴权
 	if c.isLogin {
@@ -33,7 +37,7 @@ func (c *PicPoolController) Upload() {
 		defer imgfile.Close()
 		timeNow := time.Now().UnixNano() / 1e6
 		filename := strings.TrimSpace(header.Filename)
-		//beego.Info(filename)
+
 		picture := strings.Split(filename, ".")
 		layout := strings.ToLower(picture[len(picture)-1])
 		imgpathNew := "static/picture_pool/" + strconv.FormatInt(timeNow, 10) + "." + layout
@@ -43,8 +47,27 @@ func (c *PicPoolController) Upload() {
 			fmt.Println("File upload failed！", err)
 		} else {
 			fmt.Println("File upload succeed!")
-			//将图片信息保存到数据库                                                                                                                                                                                                                                                                                                                                      //上传成功后显示信息
-			utils.DB.Create(&models.Image_Base{Name: filename, UserId: c.User.Id, Path: imgpathNew, CreatedAt: uint64(time.Now().Unix()), UpdatedAt: uint64(time.Now().Unix())}) // 通过数据的指针来创建
+			//将图片信息保存到数据库
+			mysqluser := beego.AppConfig.String("mysqluser")
+			mysqlpass := beego.AppConfig.String("mysqlpasswd")
+			mysqlport := beego.AppConfig.String("mysqlport")
+			mysqlserver := beego.AppConfig.String("mysqlserver")
+			mysqldb := beego.AppConfig.String("mysqldb")
+
+			dsn := mysqluser + ":" + mysqlpass + "@tcp(" + mysqlserver + ":" + mysqlport + ")/" + mysqldb + "?charset=utf8mb4&parseTime=True&loc=Local"
+			db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+			if err != nil {
+				beego.Error(err)
+				return
+			}
+
+			db.Create(&models.Images{Name: filename, UserID: c.User.ID, Path: imgpathNew}) // 通过数据的指针来创建
+			//查询完毕后，关闭连接
+			sqlDB, err := db.DB()
+			if err != nil {
+				fmt.Println(err)
+			}
+			sqlDB.Close()
 		}
 
 		res := ReturnMsg{
@@ -66,35 +89,31 @@ func (c *PicPoolController) Upload() {
 	}
 }
 
-type ImagesMessage struct {
-	Name string `json:"name"`
-	Url  string `json:"url"`
+//ImageResultList  ddsad
+type ImageResultList struct {
+	ImgMsgs     []models.Images `json:"image_list"`
+	PageCount   int             `josn:"page_count"`
+	PageIndex   int             `json:""page_index`
+	PrePage     int             `json:"prepage"`
+	NextPage    int             `json:"nextpage"`
+	PageLastArr []int           `json:"pagelast_arr"`
+	PageTopArr  []int           `json:"pagetop_arr"`
 }
 
-type ImagesCols struct {
-	ImagesCol []ImagesMessage `json:"image_col"`
-}
-
-type ImageRows struct {
-	ImageRow []ImagesCols `json:"image_row"`
-}
-
-//图片集获取路由
+//QueryImages 图片集获取路由
 func (c *PicPoolController) QueryImages() {
 	if c.isLogin {
-		beego.Info("==================================", c.User.Id)
-		var image_lists = []models.Image_Base{}
-		utils.DB.Where("user_id = ?", c.User.Id).Find(&image_lists)
-		beego.Info(image_lists)
+		var imageResultList = ImageResultList{}
+		var imageLists = []models.Images{}
 
-		//后端分页功能实现
 		var count int
+		var prepage int
+		var nextpage int
 		//如果只是获取数据长度的话，此处可以进一步优化
-		count = int(len(image_lists))
+		count = int(len(imageLists))
 		if count == 0 {
 			count = 1
 		}
-		beego.Info("count===", count)
 
 		pageindex, _ := strconv.Atoi(c.GetString("pageIndex"))
 		pagesize := 9
@@ -103,82 +122,72 @@ func (c *PicPoolController) QueryImages() {
 			pagecount = 1
 		}
 
-		imagesec_lists := []models.Image_Base{}
-		utils.DB.Where("user_id=?", c.User.Id).Order("id desc").Offset((pageindex - 1) * pagesize).Limit(pagesize).Find(&imagesec_lists)
+		imagesecLists := []models.Images{}
+		mysqluser := beego.AppConfig.String("mysqluser")
+		mysqlpass := beego.AppConfig.String("mysqlpasswd")
+		mysqlport := beego.AppConfig.String("mysqlport")
+		mysqlserver := beego.AppConfig.String("mysqlserver")
+		mysqldb := beego.AppConfig.String("mysqldb")
 
-		c.Data["pagecount"] = pagecount
-		c.Data["pageindex"] = pageindex
+		dsn := mysqluser + ":" + mysqlpass + "@tcp(" + mysqlserver + ":" + mysqlport + ")/" + mysqldb + "?charset=utf8mb4&parseTime=True&loc=Local"
+		db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+		if err != nil {
+			beego.Error(err)
+			return
+		}
+
+		db.Where("user_id=?", c.User.ID).Order("id desc").Offset((pageindex - 1) * pagesize).Limit(pagesize).Find(&imagesecLists)
+		//查询完毕后，关闭连接
+		sqlDB, err := db.DB()
+		if err != nil {
+			fmt.Println(err)
+		}
+		sqlDB.Close()
+
+		imageResultList.PageCount = pagecount
+		imageResultList.PageIndex = pageindex
+
 		if pageindex > 1 {
-			c.Data["prepage"] = pageindex - 1
+			prepage = pageindex - 1
 		} else {
-			c.Data["prepage"] = pageindex
+			prepage = pageindex
 		}
 
 		if pageindex < pagecount {
-			c.Data["nexpage"] = pageindex + 1
+			nextpage = pageindex + 1
 		} else {
-			c.Data["nexpage"] = pageindex
+			nextpage = pageindex
 		}
 
+		imageResultList.PrePage = prepage
+		imageResultList.NextPage = nextpage
+
 		//判断pagecount是否大于7
-		var pagetop_arr []int
-		var pagelast_arr []int
+		var pagetopArr []int
+		var pagelastArr []int
 		//九宫图图片集
 		if pagecount > 7 {
 			for i := 0; i < 4; i++ {
-				pagetop_arr = append(pagetop_arr, i+1)
+				pagetopArr = append(pagetopArr, i+1)
 			}
 			for i := pagecount - 3; i < pagecount; i++ {
-				pagelast_arr = append(pagelast_arr, i+1)
+				pagelastArr = append(pagelastArr, i+1)
 			}
-			c.Data["pagelast_arr"] = pagelast_arr
 		} else {
 			for i := 0; i < pagecount; i++ {
-				pagetop_arr = append(pagetop_arr, i+1)
+				pagetopArr = append(pagetopArr, i+1)
 			}
 		}
-		c.Data["pagetop_arr"] = pagetop_arr
 
-		var imageMessRow ImageRows
-		var imageMessCol ImagesCols
-		var imageMessItem ImagesMessage
+		imageResultList.PageTopArr = pagetopArr
+		imageResultList.PageLastArr = pagelastArr
+		imageResultList.ImgMsgs = imagesecLists
 
-		var imageMessItemArray []ImagesMessage
-		var imageMessColArray []ImagesCols
-
-		i := 0
-		j := 0
-		k := 0
-
-		for i = 0; i < int(count/3); i++ {
-			for j = 0; j < 3; j++ {
-				k++
-				imageMessItem.Name = imagesec_lists[k].Name
-				imageMessItem.Url = imagesec_lists[k].Path
-				imageMessItemArray = append(imageMessItemArray, imageMessItem)
-			}
-			imageMessCol.ImagesCol = imageMessItemArray
-			imageMessColArray = append(imageMessColArray, imageMessCol)
-			imageMessItemArray = []ImagesMessage{}
-		}
-		imageMessRow.ImageRow = imageMessColArray
-		imageMessItemArray = []ImagesMessage{}
-		//imageMessColArray = []ImagesCols{}
-
-		for i = (int(count/3) * 3); i < count; i++ {
-			imageMessItem.Name = imagesec_lists[i].Name
-			imageMessItem.Url = imagesec_lists[i].Path
-			imageMessItemArray = append(imageMessItemArray, imageMessItem)
-		}
-		imageMessCol.ImagesCol = imageMessItemArray
-		imageMessColArray = append(imageMessColArray, imageMessCol)
-		imageMessRow.ImageRow = imageMessColArray
-
-		jsonBytes, err := json.Marshal(imageMessRow)
+		jsonBytes, err := json.Marshal(imageResultList)
 		if err != nil {
 			beego.Info(err)
 		}
-		beego.Info(string(jsonBytes))
+
 		c.Data["json"] = string(jsonBytes)
 		c.ServeJSON()
 	} else {

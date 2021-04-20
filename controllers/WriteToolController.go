@@ -4,7 +4,6 @@ package controllers
 
 import (
 	"WriterReaderLog/models"
-	"WriterReaderLog/utils"
 	"fmt"
 	"math"
 	"strconv"
@@ -16,11 +15,12 @@ import (
 	"gorm.io/gorm"
 )
 
+//WriteToolController 控制器结构体
 type WriteToolController struct {
-	UserStatusController
+	AuthController
 }
 
-//写作工具首页
+//Index 写作工具首页
 func (c *WriteToolController) Index() {
 	if c.isLogin {
 		beego.Info("已登陆")
@@ -28,8 +28,8 @@ func (c *WriteToolController) Index() {
 		c.Data["is_block"] = "block"
 		c.Data["is_load_block"] = "none"
 		c.Data["newarticle"] = 1
-		c.Layout = "layouts/app.tpl"
-		c.TplName = "pages/writeTool/all_writer.tpl"
+		c.Layout = "layouts/app.html"
+		c.TplName = "pages/writeTool/all_writer.html"
 	} else {
 		//如果session超时，则显示登陆按钮
 		c.Data["is_block"] = "none"
@@ -38,63 +38,62 @@ func (c *WriteToolController) Index() {
 	}
 }
 
-//保存草稿
+//SaveTemp 保存草稿入口
 func (c *WriteToolController) SaveTemp() {
-	//获取文章编辑表单
+	articleID := c.GetString("articleid")
+	var articleClass models.ArticleClass
 	markdownText := c.GetString("leoaylog-editor-markdown-doc")
-	//碎碎念的文章标题格式固定为xx年xx月xx日——碎碎念
 	title := c.GetString("title")
-	//一级标题
 	firstClass := c.GetString("article_class1")
-	//二级标题
 	secondClass := c.GetString("article_class2")
-
 	htmlCode := c.GetString("leoaylog-editor-html-code")
-	beego.Info("一级分类", firstClass)
-	beego.Info("二级分类", secondClass)
-	beego.Info("标题", title)
-	beego.Info("markdown", markdownText)
-	beego.Info("htmlCode", htmlCode)
+	summary := c.GetString("summary")
+	mainPicPath := c.GetString("main_pic_path")
 
-	dsn := "root:111111@tcp(127.0.0.1:3306)/leoaylab?charset=utf8"
+	mysqluser := beego.AppConfig.String("mysqluser")
+	mysqlpass := beego.AppConfig.String("mysqlpasswd")
+	mysqlport := beego.AppConfig.String("mysqlport")
+	mysqlserver := beego.AppConfig.String("mysqlserver")
+	mysqldb := beego.AppConfig.String("mysqldb")
+
+	dsn := mysqluser + ":" + mysqlpass + "@tcp(" + mysqlserver + ":" + mysqlport + ")/" + mysqldb + "?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		fmt.Println("Err is")
+		beego.Error(err)
+		return
 	}
 
-	//db.Model(&models.Article_bases{}).Where("id = ?", 2).Update("author", "klkdlsajklsajd")
-	utils.DB.Model(&models.Article_bases{}).Where("id = ?", 2).Update("author", "cccccccccccccccccccccccccccccc")
+	db.Where("first_class = ? AND second_class = ?", firstClass, secondClass).Find(&articleClass)
 
-	//暂时将markdown写到文件,并加上时间戳
-	// fileName := "articles/" + strings.TrimSpace(title) + "#*#*#" + strconv.FormatInt(time.Now().Unix(), 10) + ".md"
-	// dstFile, err := os.Create(fileName)
-	// if err != nil {
-	// 	fmt.Println(err.Error())
-	// 	return
-	// }
-	// defer dstFile.Close()
-	// dstFile.WriteString(markdownText + "\n")
+	if articleID != "" {
+		//编辑原来的草稿文章
 
-	var article_class models.Article_classes
-	db.Where("first_class = ? AND second_class = ?", firstClass, secondClass).Find(&article_class)
-	istemp := true
-	beego.Info("first_class", firstClass)
-	beego.Info("second_class", secondClass)
-	beego.Info("Id", article_class.Id)
-	//db.Select("name", "age").Find(&users)
+		articleBase := models.Articles{Title: title, ClassID: articleClass.ID, Content: htmlCode, ContentMd: markdownText, Summary: summary, MainPicPATH: mainPicPath, IsTemp: true}
+		db.Model(&models.Articles{}).Where("id = ?", articleID).Updates(articleBase)
+	} else {
+		//创建的草稿文章
+		articleBase := models.Articles{Title: title, ClassID: articleClass.ID, Content: htmlCode, ContentMd: markdownText, Summary: summary, MainPicPATH: mainPicPath, IsTemp: true}
+		db.Create(&articleBase)
+	}
 
-	article_base := models.Article_bases{Title: title, ClassId: article_class.Id, UserId: c.User.Id, Content: htmlCode, IsTemp: istemp, Content_md: markdownText}
-	db.Create(&article_base) // 通过数据的指针来创建
+	//查询完毕后，关闭连接
+	sqlDB, err := db.DB()
+	if err != nil {
+		fmt.Println(err)
+	}
+	sqlDB.Close()
+
 	//保存草稿后，返回到编辑页面
 	c.Ctx.SetCookie("status", "success", 1)
 	c.Ctx.SetCookie("message", "恭喜！保存草稿成功！", 1)
 	c.Ctx.Redirect(302, "/")
 }
 
-//发布文章
+//Publish 发布文章
 func (c *WriteToolController) Publish() {
 	//登录之后才进行保存
 	if c.isLogin {
+		//fmt.Println("-------------------", c.GetString("upload-url"))
 		newarticle := c.GetString("newarticle")
 		//获取文章编辑表单
 		markdownText := c.GetString("leoaylog-editor-markdown-doc")
@@ -102,16 +101,49 @@ func (c *WriteToolController) Publish() {
 		firstClass := c.GetString("article_class1")
 		secondClass := c.GetString("article_class2")
 		summary := c.GetString("summary")
-		mainPicPath := c.GetString("main_pic_path")
+		mainPicPath := c.GetString("upload-url")
+
 		htmlCode := c.GetString("leoaylog-editor-html-code")
-		var article_class models.Article_classes
-		utils.DB.Where("first_class = ? AND second_class = ?", firstClass, secondClass).Find(&article_class)
+		var articleClass models.ArticleClass
+
+		mysqluser := beego.AppConfig.String("mysqluser")
+		mysqlpass := beego.AppConfig.String("mysqlpasswd")
+		mysqlport := beego.AppConfig.String("mysqlport")
+		mysqlserver := beego.AppConfig.String("mysqlserver")
+		mysqldb := beego.AppConfig.String("mysqldb")
+
+		dsn := mysqluser + ":" + mysqlpass + "@tcp(" + mysqlserver + ":" + mysqlport + ")/" + mysqldb + "?charset=utf8mb4&parseTime=True&loc=Local"
+		db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+		if err != nil {
+			beego.Error(err)
+			return
+		}
+
+		//查询完毕后，关闭连接
+		sqlDB, err := db.DB()
+		if err != nil {
+			fmt.Println(err)
+		}
+		defer sqlDB.Close()
+
+		db.Where("first_class = ? AND second_class = ?", firstClass, secondClass).Find(&articleClass)
+		articleID := c.GetString("articleid")
+		if articleID != "" {
+			//编辑原来的草稿文章
+			articleBase := models.Articles{Title: title, ClassID: articleClass.ID, Content: htmlCode, ContentMd: markdownText, Summary: summary, MainPicPATH: mainPicPath, IsTemp: true}
+			db.Save(&articleBase)
+		} else {
+			//创建的草稿文章
+			articleBase := models.Articles{Title: title, ClassID: articleClass.ID, Content: htmlCode, ContentMd: markdownText, Summary: summary, MainPicPATH: mainPicPath, IsTemp: false}
+			db.Create(&articleBase)
+		}
+
 		istemp := false
 		if newarticle == "1" {
-			utils.DB.Create(&models.Article_bases{Title: title, Author: c.User.Name, EditorId: 1, MainPicPath: mainPicPath, Summary: summary, UserId: c.User.Id, ClassId: article_class.Id, Content: htmlCode, ApprovalNum: 10, StarNum: 10, IsTemp: istemp, Content_md: markdownText, Comments: "leoay", CreatedAt: uint64(time.Now().Unix()), UpdatedAt: uint64(time.Now().Unix())}) // 通过数据的指针来创建
+			db.Create(&models.Articles{Title: title, Author: c.User.Name, MainPicPATH: mainPicPath, Summary: summary, UserID: c.User.ID, ClassID: articleClass.ID, Content: htmlCode, ApprovalNum: 10, StarNum: 10, IsTemp: istemp, ContentMd: markdownText, Comments: "leoay"}) // 通过数据的指针来创建
 		} else {
 			ariid, _ := strconv.Atoi(c.GetString("articleid"))
-			utils.DB.Model(&models.Article_bases{Id: uint(ariid)}).Updates(models.Article_bases{Title: title, ClassId: article_class.Id, MainPicPath: mainPicPath, Summary: summary, Content: htmlCode, ApprovalNum: 10, StarNum: 10, IsTemp: istemp, Content_md: markdownText, Comments: "leoay", UpdatedAt: uint64(time.Now().Unix())})
+			db.Model(&models.Articles{ID: int64(ariid)}).Updates(models.Articles{Title: title, ClassID: articleClass.ID, MainPicPATH: mainPicPath, Summary: summary, Content: htmlCode, ApprovalNum: 10, StarNum: 10, IsTemp: istemp, ContentMd: markdownText, Comments: "leoay"})
 		}
 	}
 	c.Ctx.SetCookie("status", "success", 1)
@@ -119,28 +151,54 @@ func (c *WriteToolController) Publish() {
 	c.Ctx.Redirect(302, "/")
 }
 
-//重新编辑文章
+//EditArticle 重新编辑文章
 func (c *WriteToolController) EditArticle() {
-	artId := c.GetString(":id")
+	artID := c.GetString(":id")
 	if c.isLogin {
-		var articles models.Article_bases
-		utils.DB.Where("id=?", artId).Find(&articles)
-		beego.Info("一登陆")
+		var articles models.Articles
+
+		mysqluser := beego.AppConfig.String("mysqluser")
+		mysqlpass := beego.AppConfig.String("mysqlpasswd")
+		mysqlport := beego.AppConfig.String("mysqlport")
+		mysqlserver := beego.AppConfig.String("mysqlserver")
+		mysqldb := beego.AppConfig.String("mysqldb")
+
+		dsn := mysqluser + ":" + mysqlpass + "@tcp(" + mysqlserver + ":" + mysqlport + ")/" + mysqldb + "?charset=utf8mb4&parseTime=True&loc=Local"
+		db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+		if err != nil {
+			beego.Error(err)
+			return
+		}
+
+		//查询用户是否存在
+		db.Where("id=?", artID).Find(&articles)
+
 		c.Data["user"] = c.User
 		c.Data["is_block"] = "block"
 		c.Data["is_load_block"] = "none"
-		c.Data["markdown"] = articles.Content_md
+		c.Data["markdown"] = articles.ContentMd
 		c.Data["artTitle"] = articles.Title
-		c.Data["articleid"] = articles.Id
+		c.Data["articleid"] = articles.ID
 		c.Data["newarticle"] = 0
-		classid := articles.ClassId
-		var classT models.Article_classes
-		utils.DB.Where("id=?", classid).Find(&classT)
+		c.Data["main_pic_path"] = articles.MainPicPATH
+		c.Data["summary"] = articles.Summary
+		c.Data["istemp"] = articles.IsTemp
+		classid := articles.ClassID
+		var classT models.ArticleClass
+		db.Where("id=?", classid).Find(&classT)
+
+		//查询完毕后，关闭连接
+		sqlDB, err := db.DB()
+		if err != nil {
+			fmt.Println(err)
+		}
+		sqlDB.Close()
+
 		c.Data["firstClass"] = classT.FirstClass
 		c.Data["secondClass"] = classT.SecondClass
 
-		c.Layout = "layouts/app.tpl"
-		c.TplName = "pages/writeTool/all_writer.tpl"
+		c.Layout = "layouts/app.html"
+		c.TplName = "pages/writeTool/all_writer.html"
 	} else {
 		//如果session超时，则显示登陆按钮
 		c.Data["is_block"] = "none"
@@ -149,13 +207,15 @@ func (c *WriteToolController) EditArticle() {
 	}
 }
 
+//ArticleInfo 文章信息
 type ArticleInfo struct {
-	Id                      int
+	ID                      int64
 	ArticleTitle            string
 	ArticleContent          string
 	ArticleFirstClass       string
 	ArticleSecondClass      string
 	ArticleAuthor           string
+	ArticleReadNum          int
 	ArticleCreateTimeSub    string
 	ArticleUpdateTimeSub    string
 	ArticleCreateTimeUTC    string
@@ -164,7 +224,7 @@ type ArticleInfo struct {
 	ArticleSecondClassRoute string
 }
 
-//计算时间
+//TimeTrans 计算时间工具
 func TimeTrans(timestamp uint64) (string, string) {
 	timeSubUnix := uint64(time.Now().Unix()) - timestamp
 	beego.Info(timeSubUnix)
@@ -202,11 +262,35 @@ func TimeTrans(timestamp uint64) (string, string) {
 	return timeutc, timesub
 }
 
-//显示文章详情
-//传入文章id,显示文章详细内容
+//ShowArticleDetail 显示文章详情
 func (c *WriteToolController) ShowArticleDetail() {
 	articleInfo := ArticleInfo{}
-	article_id := c.GetString(":id")
+	articleID := c.GetString(":id")
+	//user_ip := exnet.ClientPublicIP(c.Ctx.Request)
+
+	beego.Info("11111111111111111111111111", c.AppController)
+
+	//addr := req.RemoteAddr // "IP:port" "192.168.1.150:8889"
+	//判断当前作者是否已经读过这篇文章
+	//article_record := models.Article_Read_Record{}
+	//utils.DB.Where("article_id=?", article_id).Where("user_ip=?", user_ip).Find(&article_record)
+	//beego.Info("@@@@@@@@@@@@@@@@@@@@", article_record)
+
+	// if ("" == article_record.UserIp) && ("true" != article_id) {
+	// 	//当前用户没有读过这篇文章，阅读数加1
+	// 	utils.DB.Create(&models.Article_Read_Record{UserIp: user_ip, ArticleId: article_id}) // 通过数据的指针来创建
+	// 	//更新阅读数
+	// 	article_base := models.Article_bases{}
+
+	// 	utils.DB.Where("id=?", article_id).Find(&article_base)
+	// 	beego.Info("999999999999999999999999999999", article_base)
+	// 	currentReadNum := article_base.ReadNum
+	// 	beego.Info("555555555555555555555555555", currentReadNum)
+	// 	currentReadNum = currentReadNum + 1
+	// 	ariid, _ := strconv.Atoi(c.GetString("articleid"))
+	// 	utils.DB.Model(&models.Article_bases{Id: uint(ariid)}).Updates(models.Article_bases{ReadNum: currentReadNum})
+	// }
+
 	if c.isLogin {
 		beego.Info("一登陆")
 		c.Data["user"] = c.User
@@ -219,65 +303,109 @@ func (c *WriteToolController) ShowArticleDetail() {
 	}
 
 	//获取文章详细内容
-	article_detail := models.Article_bases{}
-	utils.DB.Where("id=?", article_id).Find(&article_detail)
-	//fmt.Println(all_daliy_logs[3].Content)
-	article_class_id := article_detail.ClassId
-	articleInfo.Id, _ = strconv.Atoi(article_id)
+	articleDetail := models.Articles{}
+
+	mysqluser := beego.AppConfig.String("mysqluser")
+	mysqlpass := beego.AppConfig.String("mysqlpasswd")
+	mysqlport := beego.AppConfig.String("mysqlport")
+	mysqlserver := beego.AppConfig.String("mysqlserver")
+	mysqldb := beego.AppConfig.String("mysqldb")
+
+	dsn := mysqluser + ":" + mysqlpass + "@tcp(" + mysqlserver + ":" + mysqlport + ")/" + mysqldb + "?charset=utf8mb4&parseTime=True&loc=Local"
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		beego.Error(err)
+		return
+	}
+
+	//查询用户是否存在
+	db.Where("id=?", articleID).Find(&articleDetail)
+
+	articleClassID := articleDetail.ClassID
+	articleInfo.ID = articleDetail.ClassID
 
 	//获取文章类别
-	article_class := models.Article_classes{}
-	utils.DB.Where("id=?", article_class_id).Find(&article_class)
+	articleClass := models.ArticleClass{}
 
-	articleInfo.ArticleFirstClass = article_class.FirstClass
-	articleInfo.ArticleSecondClass = article_class.SecondClass
-	articleInfo.ArticleContent = article_detail.Content
-	articleInfo.ArticleAuthor = article_detail.Author
-	articleInfo.ArticleTitle = article_detail.Title
+	db.Where("id=?", articleClassID).Find(&articleClass)
+
+	//查询完毕后，关闭连接
+	sqlDB, err := db.DB()
+	if err != nil {
+		fmt.Println(err)
+	}
+	sqlDB.Close()
+
+	articleInfo.ArticleFirstClass = articleClass.FirstClass
+	articleInfo.ArticleSecondClass = articleClass.SecondClass
+	articleInfo.ArticleContent = articleDetail.Content
+	articleInfo.ArticleAuthor = articleDetail.Author
+	articleInfo.ArticleTitle = articleDetail.Title
+
+	articleInfo.ArticleReadNum = articleDetail.ReadNum
 
 	//获取文章类别路由
-	articleInfo.ArticleFirstClassRoute = "/" + article_class.FirstClassRoute
-	articleInfo.ArticleSecondClassRoute = "/" + article_class.FirstClassRoute + "/" + article_class.SecondClassRoute
+	articleInfo.ArticleFirstClassRoute = "/" + articleClass.FirstClassRoute
+	articleInfo.ArticleSecondClassRoute = "/" + articleClass.FirstClassRoute + "/" + articleClass.SecondClassRoute
 
 	//获取文章发布及更新时间段
 	///////////////////////////////
-	articleInfo.ArticleCreateTimeUTC, articleInfo.ArticleCreateTimeSub = TimeTrans(article_detail.CreatedAt)
-	articleInfo.ArticleUpdateTimeUTC, articleInfo.ArticleUpdateTimeSub = TimeTrans(article_detail.UpdatedAt)
+	// articleInfo.ArticleCreateTimeUTC, articleInfo.ArticleCreateTimeSub = TimeTrans(articleDetail.CreatedAt)
+	// articleInfo.ArticleUpdateTimeUTC, articleInfo.ArticleUpdateTimeSub = TimeTrans(articleDetail.UpdatedAt)
+	articleInfo.ArticleCreateTimeUTC, articleInfo.ArticleCreateTimeSub = "100", "100"
+	articleInfo.ArticleUpdateTimeUTC, articleInfo.ArticleUpdateTimeSub = "100", "100"
 
 	c.Data["articleInfo"] = articleInfo
-	//beego.Info(article_detail.Content)
 
-	c.Layout = "layouts/app.tpl"
-	c.TplName = "pages/article_detail.tpl"
+	c.Layout = "layouts/app.html"
+	c.TplName = "pages/article_detail.html"
 }
 
-type ArticleId struct {
-	Id int64 `json:id`
+//ArticleID 文章ID
+type ArticleID struct {
+	ID int64 `json:id`
 }
 
+//DataReback 数据反馈
 type DataReback struct {
 	Mes string
 }
 
-//删除文章
+//DeleteArticle 删除文章
 func (c *WriteToolController) DeleteArticle() {
 	articleid := string(c.Ctx.Input.RequestBody)
-	beego.Info(articleid)
 	articleids := strings.Split(articleid, "=")
-	beego.Info(articleids[1])
-
-	//删除文章操作需要用户为已登陆用户，如果没有登陆，则跳转
 
 	if c.isLogin {
-		beego.Info("一登陆")
 		c.Data["user"] = c.User
 		c.Data["is_block"] = "block"
 		c.Data["is_load_block"] = "none"
-		// 判断用户是否是管理员账户
+		// 判断用户是否是管理员账户,只有管理员账户才能删除文章
 		// 1. 是管理员账户
-		utils.DB.Where("id = ?", articleids[1]).Delete(&models.Article_bases{})
+
+		mysqluser := beego.AppConfig.String("mysqluser")
+		mysqlpass := beego.AppConfig.String("mysqlpasswd")
+		mysqlport := beego.AppConfig.String("mysqlport")
+		mysqlserver := beego.AppConfig.String("mysqlserver")
+		mysqldb := beego.AppConfig.String("mysqldb")
+
+		dsn := mysqluser + ":" + mysqlpass + "@tcp(" + mysqlserver + ":" + mysqlport + ")/" + mysqldb + "?charset=utf8mb4&parseTime=True&loc=Local"
+		db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+		if err != nil {
+			beego.Error(err)
+			return
+		}
+
+		db.Where("id = ?", articleids[1]).Delete(&models.Articles{})
+
+		//查询完毕后，关闭连接
+		sqlDB, err := db.DB()
+		if err != nil {
+			fmt.Println(err)
+		}
+		sqlDB.Close()
+
 	} else {
-		//如果session超时，则显示登陆按钮
 		c.Data["is_block"] = "none"
 		c.Data["is_load_block"] = "block"
 	}

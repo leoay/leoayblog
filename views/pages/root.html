@@ -1,0 +1,200 @@
+{{/*PC端页面*/}}
+<div class="uk-container uk-container-xlarge uk-visible@m main_page">
+    <div class="uk-flex uk-flex-center uk-visible@m uk-margin-medium-top content">
+        <div class="uk-width-2-3 main_pc_div">
+            {{/*图片轮播*/}}
+            <div class="uk-position-relative uk-visible-toggle uk-light" tabindex="-1" uk-slideshow="finite: false;ratio: 2:1;animation: scale" autoplay-interval=3000 autoplay="true" pause-on-hover="true" style="display:none;padding: 20px">
+                <ul class="uk-slideshow-items">
+                    <li>
+                        <img src="https://tse4-mm.cn.bing.net/th/id/OIP.-QEC7GzzKlQr8X9pKBpYTAHaEK?w=311&h=180&c=7&o=5&pid=1.7" alt="" uk-cover>
+                    </li>
+
+                    <li>
+                        <img src="https://tse4-mm.cn.bing.net/th/id/OIP.-QEC7GzzKlQr8X9pKBpYTAHaEK?w=311&h=180&c=7&o=5&pid=1.7" alt="" uk-cover>
+                    </li>
+
+                    <li>
+                        <img src="https://tse4-mm.cn.bing.net/th/id/OIP.-QEC7GzzKlQr8X9pKBpYTAHaEK?w=311&h=180&c=7&o=5&pid=1.7" alt="" uk-cover>
+                    </li>
+                </ul>
+                <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slideshow-item="previous"></a>
+                <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slideshow-item="next"></a>
+            </div>
+
+            {{/*文章列表*/}}
+            <div class="uk-margin-medium-top">
+                <ul uk-tab>
+                    <li class="uk-active"><a href="#">Go语言相关</a></li>
+                    <li class="uk-active"><a href="#">Python相关</a></li>
+                    <li><a href="#">数据库</a></li>
+                    <li><a href="#">云原生</a></li>
+                </ul>
+                <hr>
+
+                <ul class="uk-list">
+                    {{range $daliy_info := .article_lists}}
+                    <li>
+                        <a href="/show_article/{{$daliy_info.ID}}">
+                            <div class="uk-card uk-card-default uk-card-hover uk-card-body article-card">
+                                <div class="uk-grid-small uk-flex-middle uk-padding-remove" uk-grid>
+                                    <div class="uk-width-auto">
+                                        <img class="uk-comment-avatar" src="{{ $daliy_info.MainPicPath }}" alt="" style="border-radius:4px;width:235px;height:100px">
+                                    </div>
+                                    <div class="uk-width-expand@l">
+                                        <h2 class="uk-card-title article-title">{{ $daliy_info.Title }}</h2>
+                                        <p class="uk-text uk-text-small uk-text-light uk-text-truncate uk-width-5-6" style="margin-top: 13px">{{$daliy_info.Summary }}</p>
+                                    </div>
+                                    <!-- <div class="uk-flex uk-width-auto uk-flex-right uk-flex-middle count_info">
+                                        <span class="count_set" style="font-size:13px">
+                                            <span uk-icon="icon: star;ratio:0.8" uk-tooltip="点赞 0 + 评论 4 + 收藏 0"></span><span uk-tooltip="点赞 0 + 评论 4 + 收藏 0">12</span>
+                                            <span class="count_seperator">|</span>
+                                            <span class="created_time" title="{{$daliy_info.TimeUTC}}">{{$daliy_info.TimeSub}}</span>
+                                        </span>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    {{end}}
+                </ul>
+
+                {{/*分页组件*/}}
+                <div class="uk-margin-large-top">
+                    <ul class="uk-pagination uk-flex-center" uk-margin>
+                        {{$pgindex := .pageindex}}
+                        <li><a href="/?pageIndex={{.prepage}}"><span uk-pagination-previous></span></a></li>
+                        {{if gt .pagecount 7}}
+                        {{range $i, $v := .pagetop_arr}}
+                        {{if eq $v $pgindex}}
+                        <li class="uk-active" style="font-size: 17px"><a href="/?pageIndex={{$v}}">{{$v}}</a></li>
+                        {{else}}
+                            <li class=""><a href="/?pageIndex={{$v}}">{{$v}}</a></li>
+                            {{end}}
+                            {{end}}
+                            <li class="uk-disabled"><span>...</span></li>
+                            {{range $i, $v := .pagelast_arr}}
+                            {{if eq $v $pgindex}}
+                            <li class="uk-active" style="font-size: 17px"><a href="/?pageIndex={{$v}}">{{$v}}</a></li>
+                            {{else}}
+                                <li class=""><a href="/?pageIndex={{$v}}">{{$v}}</a></li>
+                                {{end}}
+                                {{end}}
+                                {{else}}
+                                    {{range $i, $v := .pagetop_arr}}
+                                    {{if eq $v $pgindex}}
+                                    <li class="uk-active" style="font-size: 17px"><a href="/?pageIndex={{$v}}">{{$v}}</a></li>
+                                    {{else}}
+                                        <li class=""><a href="/?pageIndex={{$v}}">{{$v}}</a></li>
+                                        {{end}}
+                                        {{end}}
+                                        {{end}}
+
+                                        <li><a href="/?pageIndex={{.nexpage}}"><span uk-pagination-next></span></a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 侧边栏 -->
+        <div class="uk-width-1-5 uk-visible@m uk-margin-small-left">
+                <div class="uk-card uk-card-default uk-card-body">
+                     <div class="uk-width-1">
+                        <a class="uk-icon button primary uk-flex uk-flex-center" href="/writeTool">
+                            <button class="uk-button uk-button-primary" style="font-weight: bold;font-size:22px"><img src="http://leoay.xyz:8085/static/picture_pool/1615877159838.png" style="width:20px">开始写作</button>
+                        </a>
+                        <br>
+                        <label>用书写记录人生，用键盘挥洒灵感！</label>
+                    </div>
+                    <div class="uk-width-expand">
+                        
+                    </div>
+                </div>
+
+                 <div class="uk-card uk-card-default uk-card-body uk-margin-small-top uk-height-medium uk-text-center show_card">
+                     <div class="uk-margin-media-top">
+                         <br>
+                         <br>
+                        <img class="uk-comment-avatar uk-background-cover" src="/static/siteImgAssert/leoay_labgh.jpg" width="180" height="180" alt="" style="border-radius:25px;border:solid 8px #d5d8d3"><br>
+                        <span class="uk-text-middle uk-text-bold">leoay实验室</span><br>
+                     </div>
+                </div>
+
+                <!-- <div class="uk-card uk-card-default uk-card-body uk-margin-medium-top uk-height-medium uk-text-center uk-margin-medium-bottom show_card">
+                   
+                </div>
+
+                <div class="uk-card uk-card-default uk-card-body uk-margin-small-top uk-height-medium uk-text-center show_card">
+
+                </div>
+
+                <div class="uk-card uk-card-default uk-card-body uk-height-medium uk-text-center uk-margin-medium-bottom show_card">
+                   
+                </div>
+
+                <div class="uk-card uk-card-default uk-card-body uk-margin-medium-top uk-height-medium uk-text-center uk-margin-medium-bottom show_card">
+                 
+                </div> -->
+            </div>
+    </div>
+</div>
+
+{{/*======================================================================================================================================*/}}
+
+{{/*移动端页面*/}}
+<div class="uk-flex uk-flex-center uk-hidden@m">
+    <div class="uk-width-1-1">
+        {{/*图片轮播*/}}
+        <div class="uk-position-relative uk-visible-toggle uk-light" tabindex="-1" uk-slideshow="finite: false;ratio: 2:1;animation: scale" autoplay-interval=3000 autoplay="true" pause-on-hover="true">
+            <ul class="uk-slideshow-items">
+                <li>
+                    <img src="http://getuikit.dev-tang.com/skin/ukv3/images/photo.jpg" alt="" uk-cover>
+                </li>
+                <li>
+                    <img src="http://getuikit.dev-tang.com/skin/ukv3/images/dark.jpg" alt="" uk-cover>
+                </li>
+                <li>
+                    <img src="http://getuikit.dev-tang.com/skin/ukv3/images/light.jpg" alt="" uk-cover>
+                </li>
+            </ul>
+            <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slideshow-item="previous"></a>
+            <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slideshow-item="next"></a>
+        </div>
+
+        <hr class="uk-divider-icon">
+
+        {{/*文章列表*/}}
+        <div class="uk-margin-media-top">
+
+            <ul class="uk-list">
+                {{/*一个文章列表*/}}
+                {{range $daliy_info := .article_lists}}
+                <li>
+                    <a href="/show_article/{{$daliy_info.ID}}">
+                        <div class="uk-card uk-card-default uk-card-hover uk-card-body article-card">
+                            <div class="uk-grid-small uk-flex-middle uk-padding-remove" uk-grid>
+                                <div class="uk-width-auto">
+                                    <img class="uk-comment-avatar" src="{{ $daliy_info.MainPicPath }}" alt="" style="border-radius:5px;width:100%;">
+                                </div>
+                                <div class="uk-width-expand@l">
+                                    <h2 class="uk-card-title article-title">{{ $daliy_info.Title }}</h2>
+                                    <p class="uk-text uk-text-small uk-text-light uk-text-truncate uk-width-5-6" style="margin-top: 13px">{{$daliy_info.Summary }}</p>
+                                </div>
+                                <div class="uk-flex uk-width-auto uk-flex-right uk-flex-middle count_info">
+                                    <span class="count_set" style="font-size:13px">
+                                        <span uk-icon="icon: star;ratio:0.8" uk-tooltip="点赞 0 + 评论 4 + 收藏 0"></span><span uk-tooltip="点赞 0 + 评论 4 + 收藏 0">12</span>
+                                        <span class="count_seperator">|</span>
+                                        <span class="created_time" title="{{$daliy_info.TimeUTC}}">{{$daliy_info.TimeSub}}</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                {{end}}
+            </ul>
+
+            <hr>
+        </div>
+    </div>
+</div>

@@ -1,10 +1,11 @@
 package controllers
 
+//LogoutController 登出结构体
 type LogoutController struct {
-	UserStatusController
+	AuthController
 }
 
-//注销路由
+//Logout For Logout
 func (c *LogoutController) Logout() {
 	//Todo: 如果当前账户已登陆，则跳转到首页
 	if c.isLogin {

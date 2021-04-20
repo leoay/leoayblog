@@ -1,0 +1,126 @@
+<header class="header">
+    <div class="uk-flex uk-flex-center" style="margin-top:0px">
+        <div class="uk-width-1">
+            <div style="height:5px;background:#234"></div>
+
+            <div uk-sticky="show-on-up: true; animation: uk-animation-slide-top; sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; cls-inactive: uk-navbar-transparent;" class="uk-sticky">
+                <nav class="uk-navbar uk-navbar-container uk-hidden@m uk-navbar-transparent">
+                    <div class="uk-navbar-left">
+                        <a class="uk-navbar-item uk-logo" href="/">leoay 技术圈</a>
+                    </div>
+                    <div class="uk-navbar-right">
+                        <a class="uk-navbar-toggle uk-icon uk-navbar-toggle-icon" uk-navbar-toggle-icon="" href="#m-nav" uk-toggle=""><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="navbar-toggle-icon">
+                                <rect y="9" width="20" height="2"></rect>
+                                <rect y="3" width="20" height="2"></rect>
+                                <rect y="15" width="20" height="2"></rect>
+                            </svg></a>
+                    </div>
+                </nav>
+            </div>
+            <div class="uk-sticky-placeholder" style="height: 80px; margin: 0px;" hidden=""></div>
+
+            <div uk-sticky="show-on-up: true; animation: uk-animation-slide-top; sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; cls-inactive: uk-navbar-transparent;" class="uk-sticky">
+                <nav class="uk-navbar-container uk-visible@m uk-navbar uk-navbar-transparent" uk-navbar="">
+                    <div class="uk-navbar-left uk-width-1">
+
+                            <div class="uk-width-auto">
+
+                                <ul class="uk-navbar-nav">
+                                    <a class="uk-navbar-item uk-logo uk-margin-small-left" href="/">leoay 技术圈</a>
+
+                                    <div class="uk-navbar-item uk-margin-medium-left">
+                                        <a href="/">首页</a>
+                                    </div>
+
+                                    <div class="uk-navbar-item">
+                                        <a href="/">文章列表</a>
+                                    </div>
+        
+                                    <div class="uk-navbar-item">
+                                        <form class="uk-search uk-search-default">
+                                            <a href="" class="uk-search-icon-flip" uk-search-icon></a>
+                                            <input class="uk-search-input" type="search" placeholder="搜索...">
+                                        </form>
+                                    </div>
+                                </ul>
+                            </div>
+                            <div class="uk-width-expand uk-flex uk-flex-right">
+                                <ul class="uk-navbar-nav">
+                                    <div class="uk-navbar-item" >
+                                        <img class="uk-comment-avatar" src="http://leoay.xyz:8085/static/picture_pool/1615883942274.jpg" width="50" height="50" alt="" style="border-radius:50%;border: 4px solid rgb(106, 171, 245) ">
+                                    </div>
+                   
+                                    <li style="display: {{.is_block}}">
+                                        <div class="uk-navbar-item">
+                                            <label class="">{{.user.Name}}</label>
+                                        </div>
+        
+                                        <div class="uk-navbar-dropdown">
+                                            <ul class="uk-nav uk-navbar-dropdown-nav">
+                                                <li class="uk-active"><a href="#">我的博客</a></li>
+                                                <li class="uk-active"><a href="#">个人中心</a></li>
+                                                <li><a href="#"><i class="fa fa-meetup" aria-hidden="true"></i>我的收藏</a></li>
+                                                <li><a href="/user/logout"><i class="fa fa-sign-out" aria-hidden="true"></i>退出登陆</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
+               
+                                    <li style="display: {{.is_load_block}}" class="uk-width-auto">
+                                        <a href="#modal-login-box" uk-toggle><i class="fa fa-sign-in" aria-hidden="true"></i>登陆</a>
+                                    </li>
+                                    <li style="display: {{.is_load_block}}">
+                                        <a href=""><i class="fa fa-user-plus" aria-hidden="true"></i> 注册</a>
+                                    </li>
+                                </ul>
+                                <div class="uk-navbar-item uk-width-1-6">
+                                        
+                                </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        {{/*弹出登陆界面*/}}
+        <div id="modal-login-box" class="uk-flex-top uk-animation-fade" uk-modal>
+            <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+                <button class="uk-modal-close-default uk-icon uk-close" type="button" uk-close=""><svg width="14" height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg" data-svg="close-icon">
+                        <line fill="none" stroke="#000" stroke-width="1.1" x1="1" y1="1" x2="13" y2="13"></line>
+                        <line fill="none" stroke="#000" stroke-width="1.1" x1="13" y1="1" x2="1" y2="13"></line>
+                    </svg></button>
+                <div class="uk-section uk-section-small uk-flex uk-flex-middle uk-text-center uk-form-login" style="min-height: calc(35vh);">
+                    <div class="uk-width-1-1">
+                        <div class="uk-container" style="max-width: 330px;" uk-margin-medium-top uk-height-viewport="expand: true">
+                            <p class="uk-text-lead">登录</p>
+                            <form action="/user/login" method="POST">
+                                <div class="uk-margin">
+                                    <div class="uk-inline uk-width-1-1">
+                                        <span class="uk-form-icon uk-icon" uk-icon="icon: user"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="user">
+                                                <circle fill="none" stroke="#000" stroke-width="1.1" cx="9.9" cy="6.4" r="4.4"></circle>
+                                                <path fill="none" stroke="#000" stroke-width="1.1" d="M1.5,19 C2.3,14.5 5.8,11.2 10,11.2 C14.2,11.2 17.7,14.6 18.5,19.2"></path>
+                                            </svg></span>
+                                        <input class="uk-input" name="username" type="text" placeholder="电子邮箱/手机号/用户名">
+                                    </div>
+                                </div>
+                                <div class="uk-margin">
+                                    <div class="uk-inline uk-width-1-1">
+                                        <span class="uk-form-icon uk-icon" uk-icon="icon: lock"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="lock">
+                                                <rect fill="none" stroke="#000" height="10" width="13" y="8.5" x="3.5"></rect>
+                                                <path fill="none" stroke="#000" d="M6.5,8 L6.5,4.88 C6.5,3.01 8.07,1.5 10,1.5 C11.93,1.5 13.5,3.01 13.5,4.88 L13.5,8"></path>
+                                            </svg></span>
+                                        <input class="uk-input" name="password" type="password" placeholder="密码">
+                                    </div>
+                                </div>
+                                <div class="uk-margin">
+                                    <div class="uk-inline">
+                                        <label><input class="uk-checkbox" type="checkbox"> 记住登录状态</label>
+                                    </div>
+                                </div>
+                                <button class="uk-button uk-button-primary uk-width-1-1">登录</button>
+                                <br><br>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</header>

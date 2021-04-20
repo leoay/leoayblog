@@ -9,7 +9,7 @@ import (
 func init() {
 	beego.Router("/", &controllers.MainController{})
 	//上传图片路由
-	beego.Router("/api/upload_img", &controllers.UploadImgController{})
+	//beego.Router("/api/upload_img", &controllers.UploadImgController{})
 	//上传文件路由
 
 	//登陆认证模块
@@ -21,7 +21,7 @@ func init() {
 
 	//代码技术
 	//技术专栏
-	beego.Router("/codeTech/tecCol", &controllers.CodeTechController{}, "get:TechColumn")
+	//beego.Router("/codeTech/tecCol", &controllers.CodeTechController{}, "get:TechColumn")
 
 	//####写作工具和文章管理#######################
 	beego.Router("/writeTool", &controllers.WriteToolController{}, "get:Index")
@@ -35,9 +35,9 @@ func init() {
 
 	//#####################################
 	//碎碎念
-	beego.Router("/creativeAbility/brokenThoughts", &controllers.CreatorController{}, "get:DaliyThinkIndex")
+	//beego.Router("/creativeAbility/brokenThoughts", &controllers.CreatorController{}, "get:DaliyThinkIndex")
 	//公众号文章
-	beego.Router("/creativeAbility/wePubWriting", &controllers.CreatorController{}, "get:WeArticleIndex")
+	//beego.Router("/creativeAbility/wePubWriting", &controllers.CreatorController{}, "get:WeArticleIndex")
 
 	//关于路由
 	beego.Router("/about/leoaylab", &controllers.AboutController{}, "get:AboutWebSite")
@@ -55,16 +55,10 @@ func init() {
 	beego.Router("open/picpool/queryimages", &controllers.OpenPicPoolController{}, "get:OpenQueryImages")
 
 	//github oauth认证路由
-	beego.Router("/api/github_oauth", &controllers.LoginController{}, "get:Github_oauth")
+	//beego.Router("/api/github_oauth", &controllers.LoginController{}, "get:Github_oauth")
 
 	//公众号关注API测试
-	beego.Router("/api/getWeCode", &controllers.ApiController{}, "get:GenCheckCodePre")
-
-	//视频播放器
-	beego.Router("/api/play", &controllers.MainController{}, "get:VideoPlayer")
-
-	//PDF reader
-	beego.Router("/reader/pdf", &controllers.MainController{}, "get:PdfReader")
+	//beego.Router("/api/getWeCode", &controllers.ApiController{}, "get:GenCheckCodePre")
 
 	//用户信息
 	//用户的博客显示页
@@ -72,5 +66,8 @@ func init() {
 
 	//leoay工作空间
 	beego.Router("/workstation", &controllers.ToolController{}, "get:WorkStation")
+
+	//showVideo
+	beego.Router("/showvideo", &controllers.StreamController{}, "get:Show")
 
 }

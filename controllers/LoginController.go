@@ -2,57 +2,72 @@ package controllers
 
 import (
 	"WriterReaderLog/models"
-	"WriterReaderLog/utils"
-	"encoding/base64"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 
 	"github.com/astaxie/beego"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
+//LoginController 控制器结构
 type LoginController struct {
-	UserStatusController
+	AuthController
 }
 
-//登陆界面
+//Index 登陆界面
 func (c *LoginController) Index() {
 	//Todo: 如果当前账户已登陆，则跳转到首页
 	if c.isLogin {
-		beego.Info("当前用户已登陆，即将跳转到首页!")
 		c.Data["is_block"] = "none"
 		c.Data["is_load_block"] = "block"
 		c.Ctx.Redirect(302, "/")
 	} else {
-		beego.Info("当前用户未登录!")
 		c.Data["is_block"] = "none"
 		c.Data["is_load_block"] = "none"
-		c.Layout = "layouts/app.tpl"
-		c.TplName = "auth/login.tpl"
+		c.Layout = "layouts/app.html"
+		c.TplName = "auth/login.html"
 	}
 }
 
-//账户登陆
+//Login 账户登陆
 func (c *LoginController) Login() {
-	//Todo: 如果当前账户已登陆，则跳转到首页
+	beego.Info("SDADA")
 	//判断session是否有效
 	username := c.GetString("username")
-	beego.Info(username)
 	password := c.GetString("password")
-	beego.Info("password", string(password))
 	user := models.User{}
-	utils.DB.Where("name=?", username).Find(&user)
-	beego.Info(user.Pwd)
+
+	mysqluser := beego.AppConfig.String("mysqluser")
+	mysqlpass := beego.AppConfig.String("mysqlpasswd")
+	mysqlport := beego.AppConfig.String("mysqlport")
+	mysqlserver := beego.AppConfig.String("mysqlserver")
+	mysqldb := beego.AppConfig.String("mysqldb")
+
+	dsn := mysqluser + ":" + mysqlpass + "@tcp(" + mysqlserver + ":" + mysqlport + ")/" + mysqldb + "?charset=utf8mb4&parseTime=True&loc=Local"
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		beego.Error(err)
+		return
+	}
+
+	//查询用户是否存在
+	db.Where("name=?", username).Find(&user)
+
+	//查询完毕后，关闭连接
+	sqlDB, err := db.DB()
+	if err != nil {
+		fmt.Println(err)
+	}
+	sqlDB.Close()
+	beego.Info(user)
 	//将密码与数据库中的密码进行对比
-	err := bcrypt.CompareHashAndPassword([]byte(user.Pwd), []byte(password))
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if err != nil {
 		beego.Info("用户密码验证失败！")
 	} else {
 		beego.Info("用户密码验证通过！")
-		//保存session
-		c.SetSession("userid", user.Id)
+		c.SetSession("userid", user.ID)
 		c.SetSession("password", password)
 
 		//登陆成功，跳转到首页
@@ -60,70 +75,70 @@ func (c *LoginController) Login() {
 	}
 }
 
-//tiken信息结构体
-type AuthRes struct {
-	Access_token string `json:"access_token"`
-	Scope        string `json:"scope"`
-	Token_type   string `json:"token_type"`
-}
+// //tiken信息结构体
+// type AuthRes struct {
+// 	Access_token string `json:"access_token"`
+// 	Scope        string `json:"scope"`
+// 	Token_type   string `json:"token_type"`
+// }
 
-//github用户信息结构体
-type UserInfo struct {
-	Login     string `json:"login"`
-	Id        string `json:"id"`
-	NodeId    string `json:"node_id"`
-	AvatarUrl string `json:"avatar_url"`
-}
+// //github用户信息结构体
+// type UserInfo struct {
+// 	Login     string `json:"login"`
+// 	Id        string `json:"id"`
+// 	NodeId    string `json:"node_id"`
+// 	AvatarUrl string `json:"avatar_url"`
+// }
 
-//普通用户登陆
+// //普通用户登陆
 
-//Github 登陆，需要判断当前系统账户中是否有该github账号对应的用户信息
-func (c *LoginController) Github_oauth() {
-	sessionInfo := c.GetSession("userId")
-	if sessionInfo != nil {
-		c.Ctx.Redirect(302, "/")
-	} else {
-		code := c.GetString("code")
-		fmt.Println(code)
-		//Todo: 如果当前账户已登陆，则跳转到首页
+// //Github 登陆，需要判断当前系统账户中是否有该github账号对应的用户信息
+// func (c *LoginController) Github_oauth() {
+// 	sessionInfo := c.GetSession("userId")
+// 	if sessionInfo != nil {
+// 		c.Ctx.Redirect(302, "/")
+// 	} else {
+// 		code := c.GetString("code")
+// 		fmt.Println(code)
+// 		//Todo: 如果当前账户已登陆，则跳转到首页
 
-		url := "https://github.com/login/oauth/access_token?client_id=d0c10af3bba71a8d6753&client_secret=93ae985f1d99cf4e37b1276dfa8db35a1015aa40&code=" + code
-		req, _ := http.NewRequest("GET", url, nil)
-		req.Header.Set("Accept", "application/json")
-		resp, err := (&http.Client{}).Do(req)
-		if err != nil {
+// 		url := "https://github.com/login/oauth/access_token?client_id=d0c10af3bba71a8d6753&client_secret=93ae985f1d99cf4e37b1276dfa8db35a1015aa40&code=" + code
+// 		req, _ := http.NewRequest("GET", url, nil)
+// 		req.Header.Set("Accept", "application/json")
+// 		resp, err := (&http.Client{}).Do(req)
+// 		if err != nil {
 
-		}
-		defer resp.Body.Close()
-		body, _ := ioutil.ReadAll(resp.Body)
-		fmt.Println(string(body))
+// 		}
+// 		defer resp.Body.Close()
+// 		body, _ := ioutil.ReadAll(resp.Body)
+// 		fmt.Println(string(body))
 
-		authRes := AuthRes{}
-		err = json.Unmarshal(body, &authRes)
-		fmt.Println(authRes)
-		access_token := authRes.Access_token
-		req, _ = http.NewRequest("GET", "https://api.github.com/user", nil)
-		req.Header.Set("Authorization", "token "+access_token)
-		req.Header.Set("Accept", "application/json")
-		resp, err = (&http.Client{}).Do(req)
-		if err != nil {
+// 		authRes := AuthRes{}
+// 		err = json.Unmarshal(body, &authRes)
+// 		fmt.Println(authRes)
+// 		access_token := authRes.Access_token
+// 		req, _ = http.NewRequest("GET", "https://api.github.com/user", nil)
+// 		req.Header.Set("Authorization", "token "+access_token)
+// 		req.Header.Set("Accept", "application/json")
+// 		resp, err = (&http.Client{}).Do(req)
+// 		if err != nil {
 
-		}
-		defer resp.Body.Close()
-		respByte, _ := ioutil.ReadAll(resp.Body)
-		//resp_str := string(respByte)
-		userinfo := UserInfo{}
-		err = json.Unmarshal(respByte, &userinfo)
-		fmt.Println(userinfo)
-		name := userinfo.Login
-		id := userinfo.Id
-		avata := userinfo.AvatarUrl
-		c.Ctx.SetCookie("status", "success", 1)
-		c.Ctx.SetCookie("message", "登陆成功，开始愉快浏览把！", 1)
-		c.SetSession("userId", base64.StdEncoding.EncodeToString([]byte(name+"##"+id+"##"+avata)))
-	}
-	c.Ctx.Redirect(302, "/")
-}
+// 		}
+// 		defer resp.Body.Close()
+// 		respByte, _ := ioutil.ReadAll(resp.Body)
+// 		//resp_str := string(respByte)
+// 		userinfo := UserInfo{}
+// 		err = json.Unmarshal(respByte, &userinfo)
+// 		fmt.Println(userinfo)
+// 		name := userinfo.Login
+// 		id := userinfo.Id
+// 		avata := userinfo.AvatarUrl
+// 		c.Ctx.SetCookie("status", "success", 1)
+// 		c.Ctx.SetCookie("message", "登陆成功，开始愉快浏览把！", 1)
+// 		c.SetSession("userId", base64.StdEncoding.EncodeToString([]byte(name+"##"+id+"##"+avata)))
+// 	}
+// 	c.Ctx.Redirect(302, "/")
+// }
 
 //微信登陆，直接微信扫码登陆
 

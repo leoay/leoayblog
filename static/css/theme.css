@@ -1,69 +1,207 @@
-/*自定义样式表*/
+@font-face {
+    font-family: "SourceHanSansCNRegular";
+    src: url("./fonts/SourceHanSansCNRegular.woff2") format("woff2"),
+        url("./fonts/SourceHanSansCNRegular.woff") format("woff"),
+        url("./fonts/SourceHanSansCNRegular.ttf") format("truetype"),
+        url("./fonts/SourceHanSansCNRegular.eot") format("embedded-opentype"),
+        url("./fonts/SourceHanSansCNRegular.svg") format("svg"),
+        url("./fonts/SourceHanSansCNRegular.otf") format("opentype");
+}
 
-/* .article-card {
-  margin: 0 auto;
-  text-align: left;
-  position: relative;
-  margin-bottom: 0px;
-  background-color: rgb(255, 255, 255);
-  border-top: 0px solid rgba(15, 15, 15, 0.212);
-  border-radius:12px; 
-  padding: 0px 0px 0px 0px;
-} */
+@font-face {
+    font-family: 'Merriweather';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Merriweather'), local('Merriweather-Regular'),
+        url('../fonts/merriweather-v13-latin-regular.woff2') format('woff2'),
+        url('../fonts/merriweather-v13-latin-regular.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Lato Regular'), local('Lato-Regular'),
+        url('../fonts/lato-v11-latin-regular.woff2') format('woff2'),
+        url('../fonts/lato-v11-latin-regular.woff') format('woff');
+}
 
 html {
-  min-height: 100%;
-  position: relative;
-  background-color: #f0f2f5;
+    min-height: 100%;
+    position: relative;
+    background-color: #f0f2f5;
 }
 
 body {
-  margin-bottom: 170px;
-  background-color: #f0f2f5;
-  color: #636b6f;
-  font-family: Helvetica,Arial,PingFang SC,Noto Sans,Roboto,Microsoft Yahei,sans-serif;
-  min-height: 100vh;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  height: 100%;
+    margin-bottom: 170px;
+    background-color: #f0f2f5;
+    color: #636b6f;
+    font-family: 'Merriweather', serif;
+    min-height: 100vh;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    height: 100%;
 }
 
 header {
-  background-color: #fff;
+    background-color: #fff;
 }
 
 footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 
-.uk-padding-remove-bottom {
-  padding-bottom: 0 !important;
+/* ########################################################### */
+/* 文章外框样式 */
+.main_article {
+    font-family: 'Merriweather', serif;
+    border: 2px solid rgb(55 50 56 / 11%);
+    padding: 45px;
+    border-radius: 5px;
+    background: #ffffff;
+    min-height: 700;
+
+    word-wrap: break-word;
+    background-color: #ffffff;
+    color: #1b1d20;
+    line-height: 1.6;
+    font-size: 15px;
+    box-shadow: 0 0 5px 3px #eadbd1;
 }
 
-.uk-section {
-  display: flow-root;
-  box-sizing: border-box;
-  padding-top: 40px;
-  padding-bottom: 0px;
+.uk-card-body {
+    padding: 15px 15px;
 }
 
-.nav-topic {
-  font-size: 2em;
+
+/* 文章全文页h2样式 */
+.main_article h2 {
+    font-family: 'Lato', sans-serif;
+    font-size: 1.6em;
+    font-weight: bold;
+    line-height: 1.8;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    text-decoration: none;
 }
 
-.article-title {
-  font-family: SourceHanSansCNRegular;
-  font-size: 1.3rem;
-  line-height: 0.7;
-  margin-top: -15px;
-  color: #000;
-  text-decoration-color: #555352;
+/* 文章中的链接样式 */
+.main_article p a {
+    text-decoration: underline;
+    text-decoration-color: #b7fdf7;
+    text-decoration-thickness: 5px;
 }
 
+/* 文章中的链接鼠标放置时的样式 */
+.main_article p a:hover,
+.article-content p a:focus {
+    background: #b7fdf7;
+}
+
+/* 文章的字体样式 */
+.main_article p {
+    font-family: 'Merriweather', serif;
+    color: #111;
+    font-size: 19px;
+    line-height: 1.8;
+    font-style: initial;
+    margin: 15px 0 25px;
+}
+
+/* 文章的摘要样式样式 */
+.main_article .summary {
+    font-family: 'SourceHanSansCNRegular';
+}
+
+/* 文章全文标题样式 */
+.main_article .title {
+    font-family: 'Lato', sans-serif;
+    font-weight: 600;
+    font-style: bold;
+    font-size: 42px;
+    color: #222;
+    margin: 0;
+    line-height: 1.3;
+}
+
+/* 文章全文三级标题样式 */
+.main_article h3 {
+    font-family: 'Merriweather', serif;
+    color: #111;
+    font-size: 26px;
+    display: block;
+    font-size: 1.7em;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+}
+
+/* 文章中的图片样式 */
+.main_article p>img {
+    padding: 36px;
+}
+
+/* 分享图片代码样式 */
+.cas_content pre {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 15px;
+    word-wrap: break-word;
+    border: 2px none;
+    background-color: #ffffff;
+    color: #1b1d20;
+    line-height: 1.6;
+    font-size: 15px;
+    box-shadow: 0 0 5px 3px #eadbd1;
+}
+
+/* ########################################################### */
+
+/* 系列文章列表中文章的标题 */
+.main_page .article-title {
+    font-weight: bold;
+    line-height: 1.2;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    font-family: 'Merriweather', serif;
+    font-size: 1.4em;
+    margin-top: -15px;
+    color: rgb(56, 55, 55);
+}
+
+/* 系列文章列表外层样式 */
+.main_page {
+    max-width: 100%;
+    min-height: 670px;
+}
+
+/* 系列文章列表超链接去除下划线 */
+.main_page a {
+    text-decoration: none;
+}
+
+/* 文章全文页h2样式 */
+/* .main_page h2 {
+    font-family: 'Lato', sans-serif;
+    font-size: 1.6em;
+    font-weight: bold;
+    line-height: 1.8;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    text-decoration: none;
+} */
+
+/* 主文章外容器样式 */
 .main_pc_div {
     border: 2px solid rgb(55 50 56 / 11%);
     padding: 10px;
@@ -71,298 +209,224 @@ footer {
     background: #ffffff;
 }
 
-.main_pc_write_article {
-  border: 2 2 2 2 solid rgb(55 50 56 / 11%);
-  padding: 35px;
-  border-radius: 5px;
-  background: #ffffff;
-  min-height: 870px
+/* 写作工具页样式 */
+.main_pc_writer {
+    border: 2 2 2 2 solid rgb(55 50 56 / 11%);
+    padding: 35px;
+    border-radius: 5px;
+    background: #ffffff;
+    min-height: 870px
 }
 
-.main_article {
-  font-family: SourceHanSansCNRegular;
-  border: 2px solid rgb(55 50 56 / 11%);
-  box-shadow:0 0 23px 2px #999;
-  padding: 35px;
-  border-radius: 5px;
-  background: #ffffff;
-  min-height: 700;
-}
+/* ############################################ */
 
-.uk-card-body {
-  padding: 15px 15px;
-}
-
-.article p{
-  font-size: 1rem;
-  line-height: 1.7;
-  text-decoration: none;
-}
-
-.article h1{
-  font-family: SourceHanSansCNRegular;
-  font-size: 1.3rem;
-  line-height: 1.8;
-  text-decoration: none;
-}
-
-.article h2{
-  font-family: SourceHanSansCNRegular;
-  font-size: 1.2rem;
-  line-height: 1.8;
-  text-decoration: none;
-}
-.article h3{
-  font-family: SourceHanSansCNRegular;
-  font-size: 1.1rem;
-  line-height: 1.8;
-  text-decoration: none;
-
-  display: block;
-  font-size: 1.17em;
-  margin-block-start: 1em;
-  margin-block-end: 1em;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
-  font-weight: bold;
-}
-
-.article h4{
-  font-family: SourceHanSansCNRegular;
-  font-size: 1rem;
-  line-height: 1.8;
-  text-decoration: none;
-}
-
-.article h5{
-  font-family: SourceHanSansCNRegular;
-  font-size: 0.9rem;
-  line-height: 1.8;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: none;
-}
-
-.main_page {
-  max-width: 100%;
-  min-height: 670px;
-}
-
-.main_page .left_content h5 {
-  font-size: 19px;
-}
-  
-
-/* .uk-card-default .uk-card-header {
-  border-bottom: 0px solid #e5e5e5;
-} */
-
-/*侧边栏边框主题*/
-
-.show_card {
-  padding: 8px;
-  background: rgb(255, 255, 255);
-}
-
-.uk-card-title-side {
-  font-size: 1.2rem;
-}
-
-.uk-divider-vertical {
-  width: 1px;
-  height: 100px;
-  border-left: 0px;
-  -webkit-transform: scale(0.5, 1);
-  transform: scale(0.5, 1);
-}
-
-.uk-divider-small {
-  -webkit-transform: scale(1, 0.5);
-  transform: scale(1, 0.5);
-}
-
-.article p>img {
-  box-shadow:0 0 20px 5px #999;
-  padding: 20px;
-  margin: 20px 0px 20px 0px;
-}
-
-.cm-header {
-  color: #9cdcfe;
-}
-
-@font-face {
-  font-family: "SourceHanSansCNRegular";
-  src: url("./fonts/SourceHanSansCNRegular.woff2") format("woff2"),
-       url("./fonts/SourceHanSansCNRegular.woff") format("woff"),
-       url("./fonts/SourceHanSansCNRegular.ttf") format("truetype"),
-       url("./fonts/SourceHanSansCNRegular.eot") format("embedded-opentype"),
-       url("./fonts/SourceHanSansCNRegular.svg") format("svg"),
-       url("./fonts/SourceHanSansCNRegular.otf") format("opentype");
-}
-
-/* 文章的字体样式 */
-.main_article p {
-  font-family: SourceHanSansCNRegular;
-  color: #111;
-  font-size: 16px;
-  line-height: 1.8;
-  margin-bottom: 16px;
-}
-
-/* 文章的摘要样式样式 */
-.main_article .summary {
-  font-family: Helvetica,Arial,PingFang SC,Noto Sans,Roboto,Microsoft Yahei,sans-serif;
-}
-
-.main_article,.cas_content pre {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding: 15px;
-  word-wrap:break-word;
-  border: 2px none ;
-  background-color: #ffffff;
-  color: #1b1d20;
-  line-height: 1.6;
-  font-size: 15px;
-  box-shadow:0 0 5px 3px #eadbd1;
-}
-
-/* .main_article,.cas_content pre:before {
-  content: '';
-  display: block;
-  height: 30px;
-  width: 100%;
-  word-wrap:break-word;
-  background-size: 45px;
-  background-repeat: no-repeat;
-  color: #1b1d20;
-  background-color: ##e6f5ff;
-  margin-bottom: -7px;
-  border-radius: 0px;
-  background-position: 10px 10px;
-} */
-
-.main_article .title{
-  font-family: SourceHanSansCNRegular;
-  color: #111;
-  font-weight: 600;
-  font-size: 26px;
-}
-
-.main_article h3{
-  font-family: SourceHanSansCNRegular;
-  color: #111;
-  font-size: 26px;
-
-  display: block;
-  font-size: 1.7em;
-  margin-block-start: 1em;
-  margin-block-end: 1em;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
-  font-weight: bold;
-}
-
-
-/* .article pre {
-  background: #444444;
-  color: #d7ba7d;
-} */
-
-/*移动端适配样式表*/
-@media only screen and (max-width: 540px){
-
-  body {
-    min-height: 50vh;
-    margin-bottom: 150px;
-  }
-
-  html {
-    min-height: 80%;
-    position: relative;
-    background-color: #f0f2f5;
-  }
-
-  .uk-container {
-    padding-left: 5px;
-    padding-right: 5px;
-  }
-
-  .article h3{
-    font-size: 15px;
-  }
-
-  .article .uk-badge{
-    font-size: 8px;
-  }
-
-  .article .article_title_img {
-    width: 40px;
-  }
-
-  .article .count_info {
-    display: none;
-  }
-
-  
-  .main_page {
-    max-width: 100%;
-    min-height: 0px;
-  }
-
-  .main_article, .main_pc_write_article{
-    width: 100%;
+/* 写作工具外层样式 */
+.main_pc_writer {
     padding: 10px 10px 10px 10px;
     min-height: 0px;
     margin-top: 0px;
-  }
+}
+
+/*侧边栏边框主题*/
+.show_card {
+    padding: 8px;
+    background: rgb(255, 255, 255);
+}
+
+.uk-card-title-side {
+    font-size: 1.2rem;
+}
+
+/* 垂直分割线样式 */
+.uk-divider-vertical {
+    width: 1px;
+    height: 100px;
+    border-left: 0px;
+    -webkit-transform: scale(0.5, 1);
+    transform: scale(0.5, 1);
+}
+
+/* 细分割线样式 */
+.uk-divider-small {
+    -webkit-transform: scale(1, 0.5);
+    transform: scale(1, 0.5);
+}
+
+/* 分割横线样式 */
+.uk-divider-icon {
+    height: 2px;
+}
+
+/* 文章开头说明样式 */
+.uk-article-instruct p {
+    font-size: 18px;
+}
+
+/* 文章结尾签名样式 */
+.signature {
+    font-size: 25px;
+    font-family: 'Homemade Apple', 'SourceHanSansCNRegular', cursive;
+    color: rgb(143, 131, 131);
+}
+
+/* 文章修改按钮样式 */
+.modify-label {
+    font-family: 'SourceHanSansCNRegular', cursive;
+    font-size: 18px;
+    color: rgb(143, 131, 131);
+}
+
+/* 文章发布时间样式 */
+.article-date {
+    font-family: 'Lobster', cursive;
+    font-size: 18px;
+    font-style: italic;
+    color: rgb(193, 194, 197);
+}
+
+/* 文章阅读数样式 */
+.article-readnum {
+    font-family: 'Lobster', cursive;
+    font-size: 18px;
+    font-style: normal;
+    color: rgb(193, 194, 197);
+}
+
+/* 文章作者描述样式 */
+.author-des {
+    font-family: 'SourceHanSansCNRegular', cursive;
+    font-size: 18px;
+    font-style: normal;
+    color: rgb(135, 138, 145);
+}
+
+/* 文章分类标签样式 */
+.arti-class {
+    background-color: #ffffff;
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 2px;
+    border-color: slategray;
+    color: rgb(67, 82, 88);
+}
+
+/*移动端适配样式表*/
+@media only screen and (max-width: 540px) {
+
+    /* body {
+        min-height: 50vh;
+        margin-bottom: 150px;
+    }
+
+    html {
+        min-height: 80%;
+        position: relative;
+        background-color: #f0f2f5;
+    }
+
+    .uk-container {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .article h3 {
+        font-size: 15px;
+    }
+
+    .article .uk-badge {
+        font-size: 8px;
+    }
+
+    .article .article_title_img {
+        width: 40px;
+    }
+
+    .article .count_info {
+        display: none;
+    } */
+
+    .main_page {
+        padding: 0;
+    }
+
+    .main_article {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .main_article p img {
+        padding: 5px;
+    }
+
+    .uk-article-instruct {
+        width: 100%
+    }
+
+    .signature-container {
+        width: 100%;
+        margin-right: 20px;
+    }
+
+    .page_container {
+        margin-top: 0px !important;
+    }
+
+    .main_article .title {
+        font-family: 'Lato', sans-serif;
+        font-weight: 600;
+        font-style: bold;
+        font-size: 28px;
+        color: #222;
+        margin: 0;
+        line-height: 1.3;
+    }
+
+    .main_article p {
+        font-family: 'Merriweather', serif;
+        color: #111;
+        font-size: 16px;
+        line-height: 1.8;
+        font-style: initial;
+        margin: 15px 0 25px;
+    }
 
 
-  /* footer .logo {
+    .signature {
+        width: 100px;
+        margin-right: 10px;
+    }
+
+    .article-modify {
+        display: none;
+    }
+
+    .article-savepdf {
+        display: none;
+    }
+}
+
+
+/* /* footer .logo {
    display: none;
   } */
 
-  .footer {
-    display: none;
-  }
-
-  footer .footer_content{
-    display: none;
-  }
+.footer {
+    display: block;
 }
 
-
-@media only screen and (min-width: 750) {
-  
+footer .footer_content {
+    display: block;
 }
 
-
-/*折角功能实现*/
-/* .main_pc_write_article{
-  background: linear-gradient(to left bottom, transparent 50%, #444c57  0) no-repeat 100% 0 / 3.9em 3.9em,linear-gradient(-135deg, transparent 2.8em, #fff 0);
-} */
-
-canvas {
-  margin-top: -500px;
+ooter .footer_content {
+    display: block;
 }
 
-
-/*卡片生成工具样式表*/
-
-
-
-
-
-
-/* 公众号文章样式 */
-/* 公众号的样式不应该与博客的样式相同，博客的样式与知乎，CSDN, InfoQ等保持一致 */
-/* .main_article h3 {
-  line-height: 3.0;
-  text-align: center;
-  font-size: 20px;
-  font-weight: 600;
-  font-style: italic;
-} */
+.pic_select_item {
+    width: calc((100% - 150px)/6);
+    margin: 0 30px 30px 0;
+    cursor: pointer;
+    position: relative;
+    float: none;
+    text-align: center;
+}

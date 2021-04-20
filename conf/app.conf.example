@@ -1,0 +1,17 @@
+appname = Leoay技术圈
+appurl = http://leoay.xyz:8085/
+httpaddr = 0.0.0.0
+httpport = 8085
+runmode = dev
+copyrequestbody = true
+sessionon = true
+
+## sqlite 支持
+## TODO: 增加支持SQLite
+
+## mysql
+mysqlserver = 127.0.0.1
+mysqlport = 3306
+mysqluser = leoay
+mysqlpasswd = leoay
+mysqldb = leoaylog

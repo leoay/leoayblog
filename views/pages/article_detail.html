@@ -1,0 +1,110 @@
+<div class="uk-container uk-container-xlarge main_page">
+    <div class="page_container uk-flex uk-width-1 uk-flex-center uk-margin-medium-top uk-margin-medium-bottom">
+
+        <div class="uk-width-2-3 uk-flex-center main_article">
+            <div class="uk-flex uk-flex-left" style="color:#fff;">
+                <h1>
+                    <p class="uk-text-light uk-width-1 title uk-text-break">{{ .articleInfo.ArticleTitle }}</p>
+                </h1>
+            </div>
+            <div class="uk-margin-small-top">
+                <!-- 时间 -->
+                <span class="article-date">{{.articleInfo.ArticleCreateTimeUTC}}</span>
+
+                <!-- 作者 -->
+                <span class="author-des uk-margin-small-left"> 作者： {{.articleInfo.ArticleAuthor}}</span>
+
+                <!-- 一级分类 -->
+                <a href="{{.articleInfo.ArticleFirstClassRoute}}">
+                    <span class="uk-label arti-class uk-margin-small-left">{{.articleInfo.ArticleFirstClass}}</span>
+                </a>
+
+                <!-- 二级分类 -->
+                <a href="{{.articleInfo.ArticleSecondClassRoute}}">
+                    <span class="uk-label arti-class">{{.articleInfo.ArticleSecondClass}}</span>
+                </a>
+
+
+                <svg t="1615535212920" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4226" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25">
+                    <defs>
+                        <style type="text/css"></style>
+                    </defs>
+                    <path d="M957.971679 501.685074c-6.928806-9.940396-172.653245-243.818051-441.060321-243.818051-268.409123 0-434.131515 233.877655-441.061344 243.818051-10.730389 15.408945-10.730389 35.877115 0 51.284013 6.928806 9.94142 172.652222 243.819075 441.061344 243.819075 268.407076 0 434.130492-233.877655 441.060321-243.819075C968.701045 537.561166 968.701045 517.092995 957.971679 501.685074zM516.911358 751.877299c-248.028956 0-404.191622-224.550219-404.191622-224.550219s156.161642-224.551242 404.191622-224.551242c248.028956 0 404.190599 224.551242 404.190599 224.551242S764.940314 751.877299 516.911358 751.877299z" p-id="4227"></path>
+                    <path d="M516.911358 347.687724c-99.206466 0-179.641403 80.434937-179.641403 179.64038s80.434937 179.64038 179.641403 179.64038c99.205443 0 179.639357-80.434937 179.639357-179.64038S616.116801 347.687724 516.911358 347.687724zM516.911358 662.057621c-74.2951 0-134.730541-60.435441-134.730541-134.729517s60.435441-134.730541 134.730541-134.730541c74.294077 0 134.728494 60.435441 134.728494 134.730541S591.205435 662.057621 516.911358 662.057621z" p-id="4228"></path>
+                </svg>
+
+                <label class="article-readnum">{{.articleInfo.ArticleReadNum}}</label>
+
+
+
+                <a class="modify-label uk-margin-medium-left article-modify" href="/writeTool/{{.articleInfo.ID}}/edit_article"><span uk-icon="file-edit">修改</span></a>
+
+                <a class="modify-label uk-align-right  article-savepdf" href="/writeTool/{{.articleInfo.ID}}/edit_article"><span uk-icon="file-pdf">保存本文</span></a>
+
+            </div>
+
+            <hr class="uk-divider-icon">
+            <div>
+                <div class=" uk-flex uk-flex-left uk-margin-medium-bottom">
+                    <article class="uk-article-instruct uk-width-4-5">
+                        <div class="uk-text-center uk-grid-collapse" uk-grid>
+                            <div class="uk-width-1-6" style=" width: calc(40% * 1 / 6.001);">
+                                <hr class="uk-divider-vertical" style="width:15px;height:100%">
+                            </div>
+                            <div class="uk-width-4-5" style="text-align: left;margin-top:12px">
+                                <p>『看看论文』是一系列分析计算机和软件工程领域论文的文相关的里不会相关的论文非常感兴趣，可以直接点击链接阅读原文。</p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- 正文 -->
+                {{str2html .articleInfo.ArticleContent }}
+
+                <div id="modal-media-image" class="uk-flex-top" uk-modal>
+                    <div class="uk-modal-dialog uk-width-auto uk-margin-auto-vertical">
+                        <button class="uk-modal-close-outside" type="button" uk-close></button>
+                        <img id="showimg">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="uk-child-width-1-6 uk-flex-right uk-flex uk-flex-top uk-grid-small uk-margin-medium-top signature-container uk-grid-collapse" uk-grid>
+                <!-- <hr class="uk-width-2-3 uk-divider-small"> -->
+                <span class="signature">leoay</span>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+    var maxWidth;
+    var maxHeight;
+
+    $("img").click(function(e) {
+        //alert(e.target.src);
+        $("#showimg").attr('src', e.target.src);
+        UIkit.modal("#modal-media-image").show();
+        maxWidth = $("#modal-media-image").width(); // 图片最大宽度
+        maxHeight = $("#modal-media-image").height(); // 图片最大高度
+    });
+
+    $("#showimg").click(function() {
+        UIkit.modal("#modal-media-image").hide();
+    });
+
+    //滚轮的事件    
+    $('#modal-media-image').bind('mousewheel', function(event, delta) {
+        var dir = delta > 0 ? 'Up' : 'Down';
+        if (dir == 'Up') {
+            console.log("向上滚动， www.imiansha.com");
+            $("#showing").width("100px");
+
+        } else {
+            console.log("向下滚动， http: //blog.csdn.net/u011627980");
+        }
+        return false;
+    });
+</script>

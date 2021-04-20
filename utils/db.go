@@ -1,11 +1,14 @@
 package utils
 
 import (
+	"fmt"
+
 	"github.com/astaxie/beego"
-	"github.com/jinzhu/gorm"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
+var db *gorm.DB
 var err error
 
 func init() {
@@ -16,9 +19,19 @@ func init() {
 	mysqlserver := beego.AppConfig.String("mysqlserver")
 	mysqldb := beego.AppConfig.String("mysqldb")
 
-	DB, err = gorm.Open("mysql", mysqluser+":"+mysqlpass+"@("+mysqlserver+":"+mysqlport+")/"+mysqldb+"?charset=utf8")
+	dsn := mysqluser + ":" + mysqlpass + "@tcp(" + mysqlserver + ":" + mysqlport + ")/" + mysqldb + "?charset=utf8mb4&parseTime=True&loc=Local"
+	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		beego.Error(err)
 		return
 	}
+	return
+}
+
+func closeDB() {
+	sqlDB, err := db.DB()
+	if err != nil {
+		fmt.Println(err)
+	}
+	sqlDB.Close()
 }
